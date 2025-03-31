@@ -5,7 +5,7 @@ export class Email {
   private constructor(readonly value: string) {}
 
   static create(email: string): Email {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
     if (!validator.isEmail(email)) {
       throw InvalidEmailError.withInvalidEmail(email);
     }
