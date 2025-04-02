@@ -1,4 +1,4 @@
-import { BaseError } from '../../error';
+import { BaseError } from '../../../error';
 
 export class InvalidNIFError extends BaseError {
   private constructor(message: string) {

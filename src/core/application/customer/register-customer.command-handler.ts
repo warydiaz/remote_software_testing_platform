@@ -9,16 +9,16 @@ import { CustomerAlreadyExistsError } from './customer-already-exists.error';
 import { NIF } from '../../domain/customer//nif';
 
 @Injectable()
-export class RegisterUserCommandHandler {
+export class RegisterCustomerCommandHandler {
   constructor(
     @Inject(CUSTOMER_REPOSITORY)
     private readonly repository: CustomerRepository,
   ) {}
 
-  handle(command: RegisterCustomerCommand) {
+  async handle(command: RegisterCustomerCommand) {
     const nif = NIF.create(command.NIF);
 
-    if (this.repository.findByNIF(nif)) {
+    if (await this.repository.findByNIF(nif)) {
       throw CustomerAlreadyExistsError.withNif(command.NIF);
     }
 

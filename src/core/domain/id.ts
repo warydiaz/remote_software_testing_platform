@@ -9,6 +9,7 @@ export abstract class Id {
 
   protected static guardValidId(value: string): void {
     if (!uuidValidate(value)) {
+      // eslint-disable-next-line @typescript-eslint/only-throw-error
       throw InvalidIdError.withInvalidValue(value);
     }
   }
