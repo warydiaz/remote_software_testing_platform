@@ -1,28 +1,37 @@
-import { RegisterCustomerCommand } from './register-customer.command'
-import { Inject, Injectable } from '@nestjs/common'
+import { RegisterCustomerCommand } from './register-customer.command';
+import { Inject, Injectable } from '@nestjs/common';
 import {
-  USER_REPOSITORY,
-  UserRepository,
-} from '../../domain/user/user.repository'
-import { UserEntity } from '../../domain/user/user.entity'
-import { UserAlreadyExistsError } from './user-already-exists.error'
-import { Username } from '../../domain/user/username'
+  CUSTOMER_REPOSITORY,
+  CustomerRepository,
+} from '../../domain/customer/customer.repository';
+import { CustomerEntity } from '../../domain/customer/customer.entity';
+import { CustomerAlreadyExistsError } from './customer-already-exists.error';
+import { NIF } from '../../domain/customer//nif';
 
 @Injectable()
 export class RegisterUserCommandHandler {
   constructor(
-    @Inject(USER_REPOSITORY) private readonly repository: UserRepository,
+    @Inject(CUSTOMER_REPOSITORY)
+    private readonly repository: CustomerRepository,
   ) {}
 
-  handle(command: RegisterUserCommand) {
-    const username = Username.create(command.username)
+  handle(command: RegisterCustomerCommand) {
+    const nif = NIF.create(command.NIF);
 
-    if (this.repository.findByUsername(username)) {
-      throw UserAlreadyExistsError.withUsername(command.username)
+    if (this.repository.findByNIF(nif)) {
+      throw CustomerAlreadyExistsError.withNif(command.NIF);
     }
 
-    const user = UserEntity.create(command.id, username.value, command.fullname)
+    const customer = CustomerEntity.create(
+      command.id,
+      command.name,
+      command.surname,
+      command.email,
+      command.companyName,
+      command.taxDomicile,
+      command.NIF,
+    );
 
-    this.repository.save(user)
+    this.repository.save(customer);
   }
 }
