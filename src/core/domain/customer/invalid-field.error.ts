@@ -7,7 +7,7 @@ export class InvalidFieldError extends BaseError {
 
   static withInvalidField(): InvalidFieldError {
     return new InvalidFieldError(
-      `Validation failed: name, email, NIF are required fields`,
+      `Validation failed: name, surname, email, companyName, taxDomicile, NIF are required fields`,
     );
   }
 }
