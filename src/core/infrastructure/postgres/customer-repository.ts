@@ -6,6 +6,7 @@ import { CustomerRepository } from '../../domain/customer/customer.repository';
 import { CustomerEntity } from '../../domain/customer/customer.entity';
 import { CustomerId } from '../../domain/customer/id';
 import { NIF } from '../../domain/customer/nif';
+import { Email } from 'src/core/domain/customer/email';
 
 @Injectable()
 export class CustomerTypeOrmRepository implements CustomerRepository {
@@ -38,6 +39,13 @@ export class CustomerTypeOrmRepository implements CustomerRepository {
   async findByNIF(nif: NIF): Promise<CustomerEntity | undefined> {
     const dbCustomer = await this.repository.findOne({
       where: { NIF: nif.value },
+    });
+    return dbCustomer ? this.toDomain(dbCustomer) : undefined;
+  }
+
+  async findByEmail(email: Email): Promise<CustomerEntity | undefined> {
+    const dbCustomer = await this.repository.findOne({
+      where: { email: email.value },
     });
     return dbCustomer ? this.toDomain(dbCustomer) : undefined;
   }

@@ -10,4 +10,9 @@ export class CustomerAlreadyExistsError extends BaseError {
       `Customer with NIF ${nif} already exists`,
     );
   }
+  static withEmail(email: string) {
+    return new CustomerAlreadyExistsError(
+      `Customer with email ${email} already exists`,
+    );
+  }
 }
