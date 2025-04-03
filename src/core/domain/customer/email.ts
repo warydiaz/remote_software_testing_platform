@@ -1,11 +1,15 @@
 import { InvalidEmailError } from './invalid-email.error';
 import validator from 'validator';
+import { InvalidFieldError } from './invalid-field.error';
 
 export class Email {
   private constructor(readonly value: string) {}
 
   static create(email: string): Email {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
+    if (!email) {
+      throw InvalidFieldError.withInvalidField();
+    }
+
     if (!validator.isEmail(email)) {
       throw InvalidEmailError.withInvalidEmail(email);
     }

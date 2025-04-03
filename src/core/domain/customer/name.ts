@@ -1,11 +1,11 @@
-import { InvalidNameError } from './invalid-name.error';
+import { InvalidFieldError } from './invalid-field.error';
 
 export class Name {
   private constructor(readonly value: string) {}
 
   static create(name: string): Name {
-    if (name.length === 0) {
-      throw InvalidNameError.withInvalidName(name);
+    if (!name) {
+      throw InvalidFieldError.withInvalidField();
     }
 
     return new Name(name);

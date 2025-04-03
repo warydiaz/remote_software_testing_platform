@@ -1,11 +1,10 @@
-import { InvalidTaxDomicileError } from './invalid-tax-domicile.error';
-
+import { InvalidFieldError } from './invalid-field.error';
 export class TaxDomicile {
   private constructor(readonly value: string) {}
 
   static create(address: string): TaxDomicile {
-    if (address.trim().length === 0) {
-      throw InvalidTaxDomicileError.withInvalidAddress(address);
+    if (!address || address.trim().length === 0) {
+      throw InvalidFieldError.withInvalidField();
     }
     return new TaxDomicile(address);
   }
