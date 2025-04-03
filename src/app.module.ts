@@ -12,9 +12,9 @@ import { CustomerTypeOrmRepository } from './core/infrastructure/postgres/custom
 import { CustomerPersistenceEntity } from './core/infrastructure/postgres/entities/customer.persistence.entity';
 @Module({
   imports: [
-    ConfigModule.forRoot(), // Cargar variables de entorno
-    TypeOrmModule.forRoot(typeOrmConfig), // Importar la configuración de TypeORM
-    TypeOrmModule.forFeature([CustomerPersistenceEntity]), // 👈 Registrar la entidad en TypeORM
+    ConfigModule.forRoot(),
+    TypeOrmModule.forRoot(typeOrmConfig),
+    TypeOrmModule.forFeature([CustomerPersistenceEntity]),
   ],
   controllers: [CreateCustomerController],
   providers: [
