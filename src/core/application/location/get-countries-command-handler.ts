@@ -13,6 +13,6 @@ export class GetCountriesQueryHandler {
   ) {}
 
   async handle(): Promise<CountryEntity[]> {
-    return await this.repository.findAll();
+    return await this.repository.findAllCountries();
   }
 }
