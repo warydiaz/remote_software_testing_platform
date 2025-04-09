@@ -6,7 +6,7 @@ import {
 import { CountryEntity } from '../../domain/location/country.entity';
 
 @Injectable()
-export class GetCountriesQueryHandler {
+export class GetCountriesHandler {
   constructor(
     @Inject(LOCATION_REPOSITORY)
     private readonly repository: LocationRepository,
