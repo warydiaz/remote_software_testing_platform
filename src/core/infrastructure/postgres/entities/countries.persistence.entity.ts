@@ -1,13 +1,13 @@
-import { Entity, PrimaryColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
 @Entity('countries')
 export class CountriesPersistenceEntity {
-  @PrimaryColumn()
+  @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ nullable: true })
+  @Column({ name: 'code' })
   code: string;
 
-  @Column({ nullable: true })
+  @Column({ name: 'name' })
   name: string;
 }

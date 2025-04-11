@@ -2,7 +2,7 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
-ConfigModule.forRoot(); // Cargar .env
+void ConfigModule.forRoot(); // Cargar .env
 
 export const typeOrmConfig: TypeOrmModuleOptions = {
   type: 'postgres',
@@ -12,5 +12,5 @@ export const typeOrmConfig: TypeOrmModuleOptions = {
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
   autoLoadEntities: true,
-  synchronize: true,
+  synchronize: false,
 };
