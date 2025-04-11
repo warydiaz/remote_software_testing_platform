@@ -12,6 +12,8 @@ import { GetLocationController } from './core/ui/api/get-countries.controller';
 import { GetCountriesHandler } from './core/application/location/get-countries-command-handler';
 import { LOCATION_REPOSITORY } from './core/domain/location/location.repository';
 import { LocationTypeOrmRepository } from './core/infrastructure/postgres/location-repository';
+import { GetLanguagesHandler } from './core/application/location/get-languages-command-handler';
+import { LanguagesPersistenceEntity } from './core/infrastructure/postgres/entities/language.persistence.entity';
 
 @Module({
   imports: [
@@ -19,12 +21,18 @@ import { LocationTypeOrmRepository } from './core/infrastructure/postgres/locati
     TypeOrmModule.forRoot(typeOrmConfig),
     TypeOrmModule.forFeature([CustomerPersistenceEntity]),
     TypeOrmModule.forFeature([CountriesPersistenceEntity]),
+    TypeOrmModule.forFeature([LanguagesPersistenceEntity]),
   ],
   controllers: [CreateCustomerController, GetLocationController],
   providers: [
     RegisterCustomerCommandHandler,
     { provide: CUSTOMER_REPOSITORY, useClass: CustomerTypeOrmRepository },
     GetCountriesHandler,
+    {
+      provide: LOCATION_REPOSITORY,
+      useClass: LocationTypeOrmRepository,
+    },
+    GetLanguagesHandler,
     {
       provide: LOCATION_REPOSITORY,
       useClass: LocationTypeOrmRepository,
