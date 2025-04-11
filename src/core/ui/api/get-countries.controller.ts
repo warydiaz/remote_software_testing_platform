@@ -4,7 +4,7 @@ import { catchError } from './error.handler';
 import { GetCountriesHandler } from '../../application/location/get-countries-command-handler';
 
 @Controller()
-export class CreateCustomerController {
+export class GetCountriesController {
   constructor(private readonly commandHandler: GetCountriesHandler) {}
 
   @Get('countries')
