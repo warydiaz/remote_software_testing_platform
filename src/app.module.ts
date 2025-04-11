@@ -1,10 +1,34 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { ConfigModule } from '@nestjs/config';
+import { typeOrmConfig } from './core/config/typeorm.config';
+import { CreateCustomerController } from './core/ui/api/create-customer.controller';
+import { RegisterCustomerCommandHandler } from './core/application/customer/register-customer.command-handler';
+import { CUSTOMER_REPOSITORY } from './core/domain/customer/customer.repository';
+import { CustomerTypeOrmRepository } from './core/infrastructure/postgres/customer-repository';
+import { CustomerPersistenceEntity } from './core/infrastructure/postgres/entities/customer.persistence.entity';
+import { CountriesPersistenceEntity } from './core/infrastructure/postgres/entities/countries.persistence.entity';
+import { GetCountriesController } from './core/ui/api/get-countries.controller';
+import { GetCountriesHandler } from './core/application/location/get-countries-command-handler';
+import { LOCATION_REPOSITORY } from './core/domain/location/location.repository';
+import { LocationTypeOrmRepository } from './core/infrastructure/postgres/location-repository';
 
 @Module({
-  imports: [],
-  controllers: [AppController],
-  providers: [AppService],
+  imports: [
+    ConfigModule.forRoot(),
+    TypeOrmModule.forRoot(typeOrmConfig),
+    TypeOrmModule.forFeature([CustomerPersistenceEntity]),
+    TypeOrmModule.forFeature([CountriesPersistenceEntity]),
+  ],
+  controllers: [CreateCustomerController, GetCountriesController],
+  providers: [
+    RegisterCustomerCommandHandler,
+    { provide: CUSTOMER_REPOSITORY, useClass: CustomerTypeOrmRepository },
+    GetCountriesHandler,
+    {
+      provide: LOCATION_REPOSITORY,
+      useClass: LocationTypeOrmRepository,
+    },
+  ],
 })
 export class AppModule {}
