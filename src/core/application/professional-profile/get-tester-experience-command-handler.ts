@@ -13,7 +13,6 @@ export class GetExperienceHandler {
   ) {}
 
   async handle(): Promise<ExperienceEntity[]> {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return await this.repository.findAllExperience();
+    return await this.repository.findAllExperiences();
   }
 }

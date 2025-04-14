@@ -13,6 +13,6 @@ export class GetInterestHandler {
   ) {}
 
   async handle(): Promise<InterestEntity[]> {
-    return await this.repository.findAllInterest();
+    return await this.repository.findAllInterests();
   }
 }
