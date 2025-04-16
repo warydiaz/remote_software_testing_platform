@@ -26,6 +26,17 @@ export class LocationTypeOrmRepository implements LocationRepository {
     return dbLanguages ? this.toDomainCountries(dbLanguages) : [];
   }
 
+  async findCountryById(id: number): Promise<CountryEntity | null> {
+    const dbCountry = await this.repositoryCountries.findOne({ where: { id } });
+    return dbCountry ? this.toDomainCountries([dbCountry])[0] : null;
+  }
+  async findLanguageById(id: number): Promise<LanguageEntity | null> {
+    const dbLanguage = await this.repositoryLanguages.findOne({
+      where: { id },
+    });
+    return dbLanguage ? this.toDomainLanguages([dbLanguage])[0] : null;
+  }
+
   private toDomainCountries(
     dbCountries: CountriesPersistenceEntity[],
   ): CountryEntity[] {

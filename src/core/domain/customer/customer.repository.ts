@@ -1,5 +1,5 @@
 import { CustomerEntity } from './customer.entity';
-import { Email } from './email';
+import { Email } from '../email';
 import { CustomerId } from './id';
 import { NIF } from './nif';
 

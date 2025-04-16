@@ -7,7 +7,7 @@ import {
 import { CustomerEntity } from '../../domain/customer/customer.entity';
 import { CustomerAlreadyExistsError } from './customer-already-exists.error';
 import { NIF } from '../../domain/customer/nif';
-import { Email } from 'src/core/domain/customer/email';
+import { Email } from 'src/core/domain/email';
 
 @Injectable()
 export class RegisterCustomerCommandHandler {

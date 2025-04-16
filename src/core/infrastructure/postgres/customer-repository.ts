@@ -6,7 +6,7 @@ import { CustomerRepository } from '../../domain/customer/customer.repository';
 import { CustomerEntity } from '../../domain/customer/customer.entity';
 import { CustomerId } from '../../domain/customer/id';
 import { NIF } from '../../domain/customer/nif';
-import { Email } from 'src/core/domain/customer/email';
+import { Email } from 'src/core/domain/email';
 
 @Injectable()
 export class CustomerTypeOrmRepository implements CustomerRepository {

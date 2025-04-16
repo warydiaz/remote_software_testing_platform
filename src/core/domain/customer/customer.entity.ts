@@ -1,7 +1,7 @@
-import { Name } from './name';
-import { Surname } from './surname';
+import { Name } from '../name';
+import { Surname } from '../surname';
 import { CustomerId } from './id';
-import { Email } from './email';
+import { Email } from '../email';
 import { CompanyName } from './companyName';
 import { TaxDomicile } from './taxDomicile';
 import { NIF } from './nif';
