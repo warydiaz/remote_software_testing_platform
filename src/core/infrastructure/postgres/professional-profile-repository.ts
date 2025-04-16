@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { ProfessionalProfileRepository } from 'src/core/domain/professional-profile/professional-profile.repository';
 import { ExperiencePersistenceEntity } from './entities/experience.persistence.entity';
 import { ExperienceEntity } from 'src/core/domain/professional-profile/experience.entity';
@@ -26,6 +26,25 @@ export class ProfessionalProfileTypeOrmRepository
   async findAllInterests(): Promise<InterestEntity[]> {
     const dbInterests = await this.repositoryInterests.find();
     return dbInterests ? this.toDomainInterests(dbInterests) : [];
+  }
+
+  async getNonExistingInterestIds(interests: number[]): Promise<number[]> {
+    const dbInterests = await this.repositoryInterests.findBy({
+      id: In(interests),
+    });
+
+    const foundIds = dbInterests.map((interest) => interest.id);
+    const notFoundIds = interests.filter((id) => !foundIds.includes(id));
+
+    return notFoundIds;
+  }
+
+  async finExperienceLevel(level: number): Promise<number | null> {
+    const dbExperienceLevel = await this.repositoryExperience.findOne({
+      where: { id: level },
+    });
+
+    return dbExperienceLevel ? dbExperienceLevel.id : null;
   }
 
   private toDomainInterests(
