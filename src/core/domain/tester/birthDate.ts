@@ -18,6 +18,7 @@ export class BirthDate {
       today.getMonth(),
       today.getDate(),
     );
-    return date <= eighteenYearsAgo;
+
+    return new Date(date) <= eighteenYearsAgo;
   }
 }

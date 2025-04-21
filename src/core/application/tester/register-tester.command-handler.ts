@@ -17,13 +17,12 @@ import { Email } from 'src/core/domain/email';
 import { TesterEntity } from 'src/core/domain/tester/tester.entity';
 import { LocationDoNotExistsError } from './location-do-not-exists.error';
 import { ProfessionalProfileDoNotExistsError } from './professional-profile-do-not-exists.error';
-import { isNull } from 'node:util';
 
 @Injectable()
 export class RegisterTesterCommandHandler {
   constructor(
     @Inject(TESTER_REPOSITORY)
-    private readonly testesRepository: TesterRepository,
+    private readonly testerRepository: TesterRepository,
     @Inject(LOCATION_REPOSITORY)
     private readonly locationRepository: LocationRepository,
     @Inject(PROFESSIONAL_PROFILE_REPOSITORY)
@@ -33,15 +32,24 @@ export class RegisterTesterCommandHandler {
   async handle(command: RegisterTesterCommand) {
     const email = Email.create(command.email);
 
-    if (await this.testesRepository.findByEmail(email)) {
+    const alreadyExistTester = await this.testerRepository.findByEmail(email);
+    if (alreadyExistTester.length > 0) {
       throw TesterAlreadyExistsError.withEmail(command.email);
     }
 
-    if (await this.locationRepository.findLanguageById(command.language)) {
+    const existsLanguage = await this.locationRepository.findLanguageById(
+      command.language,
+    );
+
+    if (!existsLanguage) {
       throw LocationDoNotExistsError.languageWithId(command.language);
     }
 
-    if (await this.locationRepository.findCountryById(command.country)) {
+    const existsCountry = await this.locationRepository.findCountryById(
+      command.country,
+    );
+
+    if (!existsCountry) {
       throw LocationDoNotExistsError.countryWithId(command.country);
     }
 
@@ -57,11 +65,9 @@ export class RegisterTesterCommandHandler {
     }
 
     if (
-      isNull(
-        await this.professionalProfileRepository.finExperienceLevel(
-          command.experience_level,
-        ),
-      )
+      (await this.professionalProfileRepository.finExperienceLevel(
+        command.experience_level,
+      )) === null
     ) {
       throw ProfessionalProfileDoNotExistsError.experienceLevelWithId(
         command.experience_level,
@@ -82,6 +88,8 @@ export class RegisterTesterCommandHandler {
       command.interests,
     );
 
-    this.testesRepository.save(tester);
+    console.log('tester', tester);
+
+    this.testerRepository.save(tester);
   }
 }

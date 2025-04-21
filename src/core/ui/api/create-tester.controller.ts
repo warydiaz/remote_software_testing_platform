@@ -22,7 +22,7 @@ export class CreateTesterDto {
 export class CreateTesterController {
   constructor(private readonly commandHandler: RegisterTesterCommandHandler) {}
 
-  @Post('customers')
+  @Post('testers')
   async handle(@Body() request: CreateTesterDto, @Res() response: Response) {
     const id = uuidv4();
 

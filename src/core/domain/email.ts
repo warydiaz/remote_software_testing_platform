@@ -1,6 +1,6 @@
 import { InvalidEmailError } from './customer/invalid-email.error';
 import validator from 'validator';
-import { InvalidFieldError } from './customer/invalid-field.error';
+import { InvalidFieldError } from './invalid-field.error';
 
 export class Email {
   private constructor(readonly value: string) {}

@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-
 import { TesterPersistenceEntity } from './entities/tester.persistence.entity';
 import { TesterRepository } from '../../domain/tester/tester.repository';
 import { TesterEntity } from '../../domain/tester/tester.entity';

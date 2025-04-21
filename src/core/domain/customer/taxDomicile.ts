@@ -1,4 +1,4 @@
-import { InvalidFieldError } from './invalid-field.error';
+import { InvalidFieldError } from '../invalid-field.error';
 export class TaxDomicile {
   private constructor(readonly value: string) {}
 

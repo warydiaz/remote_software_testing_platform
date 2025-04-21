@@ -21,6 +21,11 @@ import { GetExperienceHandler } from './core/application/professional-profile/ge
 import { PROFESSIONAL_PROFILE_REPOSITORY } from './core/domain/professional-profile/professional-profile.repository';
 import { ProfessionalProfileTypeOrmRepository } from './core/infrastructure/postgres/professional-profile-repository';
 import { GetInterestHandler } from './core/application/professional-profile/get-tester-interest-command-handler';
+import { TesterPersistenceEntity } from './core/infrastructure/postgres/entities/tester.persistence.entity';
+import { CreateTesterController } from './core/ui/api/create-tester.controller';
+import { TESTER_REPOSITORY } from './core/domain/tester/tester.repository';
+import { RegisterTesterCommandHandler } from './core/application/tester/register-tester.command-handler';
+import { TesterTypeOrmRepository } from './core/infrastructure/postgres/tester-repository';
 
 @Module({
   imports: [
@@ -31,11 +36,13 @@ import { GetInterestHandler } from './core/application/professional-profile/get-
     TypeOrmModule.forFeature([LanguagesPersistenceEntity]),
     TypeOrmModule.forFeature([ExperiencePersistenceEntity]),
     TypeOrmModule.forFeature([InterestPersistenceEntity]),
+    TypeOrmModule.forFeature([TesterPersistenceEntity]),
   ],
   controllers: [
     CreateCustomerController,
     GetLocationController,
     GetProfessionalProfileController,
+    CreateTesterController,
   ],
   providers: [
     RegisterCustomerCommandHandler,
@@ -56,6 +63,13 @@ import { GetInterestHandler } from './core/application/professional-profile/get-
       useClass: ProfessionalProfileTypeOrmRepository,
     },
     GetInterestHandler,
+    {
+      provide: PROFESSIONAL_PROFILE_REPOSITORY,
+      useClass: ProfessionalProfileTypeOrmRepository,
+    },
+    RegisterTesterCommandHandler,
+    { provide: TESTER_REPOSITORY, useClass: TesterTypeOrmRepository },
+    { provide: LOCATION_REPOSITORY, useClass: LocationTypeOrmRepository },
     {
       provide: PROFESSIONAL_PROFILE_REPOSITORY,
       useClass: ProfessionalProfileTypeOrmRepository,

@@ -1,4 +1,4 @@
-import { InvalidFieldError } from './invalid-field.error';
+import { InvalidFieldError } from '../invalid-field.error';
 import { InvalidNIFError } from './invalid-nif.error';
 
 export class NIF {
