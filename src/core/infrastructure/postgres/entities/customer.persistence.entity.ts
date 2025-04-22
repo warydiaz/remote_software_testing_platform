@@ -22,4 +22,10 @@ export class CustomerPersistenceEntity {
 
   @Column()
   taxDomicile: string;
+
+  @Column()
+  userid: string;
+
+  @Column()
+  password: string;
 }

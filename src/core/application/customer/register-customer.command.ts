@@ -7,5 +7,7 @@ export class RegisterCustomerCommand {
     readonly companyName: string,
     readonly taxDomicile: string,
     readonly NIF: string,
+    readonly userId: string,
+    readonly password: string,
   ) {}
 }

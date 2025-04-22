@@ -15,4 +15,10 @@ export class CustomerAlreadyExistsError extends BaseError {
       `Customer with email ${email} already exists`,
     );
   }
+
+  static withUserId(userId: string) {
+    return new CustomerAlreadyExistsError(
+      `Customer with userId ${userId} already exists`,
+    );
+  }
 }

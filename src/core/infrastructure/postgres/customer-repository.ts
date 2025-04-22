@@ -25,6 +25,8 @@ export class CustomerTypeOrmRepository implements CustomerRepository {
     dbCustomer.companyName = customer.companyName.value;
     dbCustomer.taxDomicile = customer.taxDomicile.value;
     dbCustomer.NIF = customer.NIF.value;
+    dbCustomer.userid = customer.userId;
+    dbCustomer.password = customer.password;
 
     await this.repository.save(dbCustomer);
   }
@@ -50,6 +52,13 @@ export class CustomerTypeOrmRepository implements CustomerRepository {
     return dbCustomer ? this.toDomain(dbCustomer) : undefined;
   }
 
+  async findByUserId(userid: string): Promise<CustomerEntity | undefined> {
+    const dbCustomer = await this.repository.findOne({
+      where: { userid },
+    });
+    return dbCustomer ? this.toDomain(dbCustomer) : undefined;
+  }
+
   private toDomain(dbCustomer: CustomerPersistenceEntity): CustomerEntity {
     return CustomerEntity.create(
       dbCustomer.id,
@@ -59,6 +68,8 @@ export class CustomerTypeOrmRepository implements CustomerRepository {
       dbCustomer.companyName,
       dbCustomer.taxDomicile,
       dbCustomer.NIF,
+      dbCustomer.userid,
+      dbCustomer.password,
     );
   }
 }

@@ -8,6 +8,9 @@ import { CustomerEntity } from '../../domain/customer/customer.entity';
 import { CustomerAlreadyExistsError } from './customer-already-exists.error';
 import { NIF } from '../../domain/customer/nif';
 import { Email } from 'src/core/domain/email';
+import * as bcrypt from 'bcrypt';
+import { ConfigModule } from '@nestjs/config';
+void ConfigModule.forRoot(); // Cargar .env
 
 @Injectable()
 export class RegisterCustomerCommandHandler {
@@ -15,6 +18,8 @@ export class RegisterCustomerCommandHandler {
     @Inject(CUSTOMER_REPOSITORY)
     private readonly repository: CustomerRepository,
   ) {}
+
+  saltRounds: number = parseInt(process.env.SALT_ROUNDS ?? '10');
 
   async handle(command: RegisterCustomerCommand) {
     const nif = NIF.create(command.NIF);
@@ -28,6 +33,12 @@ export class RegisterCustomerCommandHandler {
       throw CustomerAlreadyExistsError.withEmail(command.email);
     }
 
+    if (await this.repository.findByUserId(command.userId)) {
+      throw CustomerAlreadyExistsError.withUserId(command.userId);
+    }
+
+    const hashedPassword = await bcrypt.hash(command.password, this.saltRounds);
+
     const customer = CustomerEntity.create(
       command.id,
       command.name,
@@ -36,8 +47,10 @@ export class RegisterCustomerCommandHandler {
       command.companyName,
       command.taxDomicile,
       command.NIF,
+      command.userId,
+      hashedPassword,
     );
 
-    this.repository.save(customer);
+    await this.repository.save(customer);
   }
 }
