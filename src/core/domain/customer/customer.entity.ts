@@ -1,7 +1,7 @@
-import { Name } from './name';
-import { Surname } from './surname';
+import { Name } from '../name';
+import { Surname } from '../surname';
 import { CustomerId } from './id';
-import { Email } from './email';
+import { Email } from '../email';
 import { CompanyName } from './companyName';
 import { TaxDomicile } from './taxDomicile';
 import { NIF } from './nif';
@@ -15,6 +15,8 @@ export class CustomerEntity {
     readonly companyName: CompanyName,
     readonly taxDomicile: TaxDomicile,
     readonly NIF: NIF,
+    readonly userId: string,
+    readonly password: string,
   ) {}
 
   static create(
@@ -25,6 +27,8 @@ export class CustomerEntity {
     aCompanyName: string,
     aTaxDomicile: string,
     aNIF: string,
+    aUserId: string,
+    aPassword: string,
   ): CustomerEntity {
     const id = CustomerId.create(anId);
     const name = Name.create(aName);
@@ -42,6 +46,8 @@ export class CustomerEntity {
       companyName,
       taxDomicile,
       nif,
+      aUserId,
+      aPassword,
     );
   }
 }

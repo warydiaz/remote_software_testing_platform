@@ -12,6 +12,8 @@ export class CreateCustomerDto {
   companyName: string;
   taxDomicile: string;
   NIF: string;
+  userId: string;
+  password: string;
 }
 
 @Controller()
@@ -34,6 +36,8 @@ export class CreateCustomerController {
           request.companyName,
           request.taxDomicile,
           request.NIF,
+          request.userId,
+          request.password,
         ),
       );
     } catch (error) {
