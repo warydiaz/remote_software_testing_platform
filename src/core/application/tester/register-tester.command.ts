@@ -11,5 +11,7 @@ export class RegisterTesterCommand {
     readonly country: number,
     readonly experience_level: number,
     readonly interests: number[],
+    readonly userId: string,
+    readonly password: string,
   ) {}
 }

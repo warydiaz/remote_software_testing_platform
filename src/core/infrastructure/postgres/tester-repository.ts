@@ -27,6 +27,8 @@ export class TesterTypeOrmRepository implements TesterRepository {
     dbTester.country = tester.country;
     dbTester.experienceLevel = tester.experienceLevel;
     dbTester.interests = tester.interests.map((i) => i);
+    dbTester.userId = tester.userId;
+    dbTester.password = tester.password;
 
     await this.repository.save(dbTester);
   }
@@ -34,6 +36,14 @@ export class TesterTypeOrmRepository implements TesterRepository {
   async findByEmail(email: Email): Promise<TesterEntity[]> {
     const dbTesters = await this.repository.find({
       where: { email: email.value },
+    });
+
+    return dbTesters.map(this.toDomain);
+  }
+
+  async findByUserId(userId: string): Promise<TesterEntity[]> {
+    const dbTesters = await this.repository.find({
+      where: { userId: userId },
     });
 
     return dbTesters.map(this.toDomain);
@@ -52,6 +62,8 @@ export class TesterTypeOrmRepository implements TesterRepository {
       dbTester.country,
       dbTester.experienceLevel,
       dbTester.interests,
+      dbTester.userId,
+      dbTester.password,
     );
   };
 }

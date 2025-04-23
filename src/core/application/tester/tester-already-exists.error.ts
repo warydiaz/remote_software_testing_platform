@@ -10,4 +10,10 @@ export class TesterAlreadyExistsError extends BaseError {
       `Tester with email ${email} already exists`,
     );
   }
+
+  static withUserId(userId: string) {
+    return new TesterAlreadyExistsError(
+      `Tester with userId ${userId} already exists`,
+    );
+  }
 }

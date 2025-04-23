@@ -34,4 +34,10 @@ export class TesterPersistenceEntity {
 
   @Column({ type: 'int', array: true, nullable: true })
   interests: number[]; // array de IDs de testing_interest
+
+  @Column({ type: 'varchar', length: 100, name: 'userid' })
+  userId: string;
+
+  @Column({ type: 'varchar', length: 100, name: 'password' })
+  password: string;
 }

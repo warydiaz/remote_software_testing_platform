@@ -17,6 +17,9 @@ import { Email } from 'src/core/domain/email';
 import { TesterEntity } from 'src/core/domain/tester/tester.entity';
 import { LocationDoNotExistsError } from './location-do-not-exists.error';
 import { ProfessionalProfileDoNotExistsError } from './professional-profile-do-not-exists.error';
+import * as bcrypt from 'bcrypt';
+import { ConfigModule } from '@nestjs/config';
+void ConfigModule.forRoot(); // Cargar .env
 
 @Injectable()
 export class RegisterTesterCommandHandler {
@@ -28,6 +31,8 @@ export class RegisterTesterCommandHandler {
     @Inject(PROFESSIONAL_PROFILE_REPOSITORY)
     private readonly professionalProfileRepository: ProfessionalProfileRepository,
   ) {}
+
+  saltRounds: number = parseInt(process.env.SALT_ROUNDS ?? '10');
 
   async handle(command: RegisterTesterCommand) {
     const email = Email.create(command.email);
@@ -74,6 +79,16 @@ export class RegisterTesterCommandHandler {
       );
     }
 
+    const existUserId = await this.testerRepository.findByUserId(
+      command.userId,
+    );
+
+    if (existUserId.length > 0) {
+      throw TesterAlreadyExistsError.withUserId(command.userId);
+    }
+
+    const hashedPassword = await bcrypt.hash(command.password, this.saltRounds);
+
     const tester = TesterEntity.create(
       command.id,
       command.name,
@@ -86,10 +101,10 @@ export class RegisterTesterCommandHandler {
       command.country,
       command.experience_level,
       command.interests,
+      command.userId,
+      hashedPassword,
     );
 
-    console.log('tester', tester);
-
-    this.testerRepository.save(tester);
+    await this.testerRepository.save(tester);
   }
 }

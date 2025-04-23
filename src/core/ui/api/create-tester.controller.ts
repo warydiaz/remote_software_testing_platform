@@ -16,6 +16,8 @@ export class CreateTesterDto {
   country: number;
   experience_level: number;
   interests: number[];
+  userId: string;
+  password: string;
 }
 
 @Controller()
@@ -40,6 +42,8 @@ export class CreateTesterController {
           request.country,
           request.experience_level,
           request.interests,
+          request.userId,
+          request.password,
         ),
       );
     } catch (error) {

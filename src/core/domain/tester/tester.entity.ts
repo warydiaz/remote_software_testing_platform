@@ -17,6 +17,8 @@ export class TesterEntity {
     readonly country: number,
     readonly experienceLevel: number,
     readonly interests: number[],
+    readonly userId: string,
+    readonly password: string,
   ) {}
 
   static create(
@@ -31,6 +33,8 @@ export class TesterEntity {
     aCountry: number,
     anExperienceLevel: number,
     anInterests: number[],
+    aUserId: string,
+    aPassword: string,
   ): TesterEntity {
     const id = TesterId.create(anId);
     const name = Name.create(aName);
@@ -50,6 +54,8 @@ export class TesterEntity {
       aCountry,
       anExperienceLevel,
       anInterests,
+      aUserId,
+      aPassword,
     );
   }
 }
