@@ -443,36 +443,31 @@ INSERT INTO testing_interest (description) VALUES
 ('Test Driven Development'),
 ('Other types of testing (please specify)');
 
-
-CREATE TABLE tester (
+CREATE TABLE IF NOT EXISTS "user" (
     id VARCHAR(100) PRIMARY KEY,
-    name VARCHAR(100) not null,
-    surname VARCHAR(100) not null,
-    email VARCHAR(100) not null, 
-    birth_date DATE NOT NULL CHECK (birth_date <= CURRENT_DATE - INTERVAL '18 years'),
-    
-    languages INT REFERENCES languages(id),  -- solo un idioma
-    city VARCHAR(100),
-    postal_code VARCHAR(20),
-    
-    country INT REFERENCES countries(id),
-    experience_level INT REFERENCES experience(id),
-
-    interests INT[],  -- sigue siendo un array de IDs (de testing_interest)
     userId VARCHAR(50),
-    password TEXT;
+    email VARCHAR(100) NOT NULL,
+    name VARCHAR(50) NOT NULL,
+    surname VARCHAR(50) NOT NULL,
+    password TEXT NOT NULL
 );
 
-CREATE TABLE customers ( 
+
+CREATE TABLE IF NOT EXISTS tester (
+    id VARCHAR(100) PRIMARY KEY REFERENCES "user"(id),
+    birth_date DATE NOT NULL CHECK (birth_date <= CURRENT_DATE - INTERVAL '18 years'),
+    languages INT REFERENCES languages(id),  
+    city VARCHAR(100),
+    postal_code VARCHAR(20),
+    country INT REFERENCES countries(id),
+    experience_level INT REFERENCES experience(id),
+    interests INT[]  
+);
+
+
+CREATE TABLE IF NOT EXISTS customers ( 
   NIF VARCHAR(20) NOT NULL,
   companyName VARCHAR(100) NOT NULL,
   taxDomicile VARCHAR(150) NOT NULL,
-  id VARCHAR(50) NOT NULL,
-  name VARCHAR(50) NOT NULL,
-  surname VARCHAR(50) NOT NULL,
-  email VARCHAR(100) NOT NULL,
-  userid VARCHAR(50),
-  password VARCHAR(255),
-  CONSTRAINT "PK_72355502f9f4a98aa6eacfad6c2" PRIMARY KEY ("NIF"),
-  CONSTRAINT "UQ_8536b8b85c06969f84f0c098b03" UNIQUE ("email")
+  id VARCHAR(100) PRIMARY KEY REFERENCES "user"(id)
 );
