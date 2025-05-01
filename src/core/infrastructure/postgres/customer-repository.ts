@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -7,69 +8,127 @@ import { CustomerEntity } from '../../domain/customer/customer.entity';
 import { CustomerId } from '../../domain/customer/id';
 import { NIF } from '../../domain/customer/nif';
 import { Email } from 'src/core/domain/email';
+import { UserPersistenceEntity } from './entities/user.persistence.entity';
 
 @Injectable()
 export class CustomerTypeOrmRepository implements CustomerRepository {
   constructor(
     @InjectRepository(CustomerPersistenceEntity)
-    private readonly repository: Repository<CustomerPersistenceEntity>,
+    private readonly customerRepository: Repository<CustomerPersistenceEntity>,
+    @InjectRepository(UserPersistenceEntity)
+    private readonly userRepository: Repository<UserPersistenceEntity>,
   ) {}
 
   // eslint-disable-next-line @typescript-eslint/no-misused-promises
   async save(customer: CustomerEntity): Promise<void> {
+    const user = new UserPersistenceEntity();
+    user.id = customer.id.value;
+    user.userId = customer.userId;
+    user.email = customer.email.value;
+    user.name = customer.name.value;
+    user.surname = customer.surname.value;
+    user.password = customer.password;
+
+    await this.userRepository.save(user);
+
     const dbCustomer = new CustomerPersistenceEntity();
     dbCustomer.id = customer.id.value;
-    dbCustomer.name = customer.name.value;
-    dbCustomer.surname = customer.surname.value;
-    dbCustomer.email = customer.email.value;
     dbCustomer.companyName = customer.companyName.value;
     dbCustomer.taxDomicile = customer.taxDomicile.value;
     dbCustomer.NIF = customer.NIF.value;
-    dbCustomer.userid = customer.userId;
-    dbCustomer.password = customer.password;
 
-    await this.repository.save(dbCustomer);
+    await this.customerRepository.save(dbCustomer);
   }
 
   async findById(id: CustomerId): Promise<CustomerEntity | undefined> {
-    const dbCustomer = await this.repository.findOne({
+    const dbCustomer = await this.customerRepository.findOne({
       where: { id: id.value },
     });
-    return dbCustomer ? this.toDomain(dbCustomer) : undefined;
+
+    const dbUser = await this.userRepository.findOne({
+      where: { id: id.value },
+    });
+
+    if (!dbCustomer || !dbUser) {
+      return undefined;
+    }
+
+    return dbCustomer ? this.toCustomerDomain(dbCustomer, dbUser) : undefined;
   }
 
   async findByNIF(nif: NIF): Promise<CustomerEntity | undefined> {
-    const dbCustomer = await this.repository.findOne({
+    const dbCustomer = await this.customerRepository.findOne({
       where: { NIF: nif.value },
     });
-    return dbCustomer ? this.toDomain(dbCustomer) : undefined;
+
+    if (!dbCustomer) {
+      return undefined;
+    }
+
+    const dbUser = await this.userRepository.findOne({
+      where: { id: dbCustomer.id },
+    });
+
+    if (!dbUser) {
+      return undefined;
+    }
+    return this.toCustomerDomain(dbCustomer, dbUser);
   }
 
   async findByEmail(email: Email): Promise<CustomerEntity | undefined> {
-    const dbCustomer = await this.repository.findOne({
-      where: { email: email.value },
+    const dbUser = await this.userRepository.findOne({
+      where: { id: email.value },
     });
-    return dbCustomer ? this.toDomain(dbCustomer) : undefined;
+
+    if (!dbUser) {
+      return undefined;
+    }
+
+    const dbCustomer = await this.customerRepository.findOne({
+      where: { id: dbUser.id },
+    });
+
+    if (!dbCustomer) {
+      return undefined;
+    }
+
+    return this.toCustomerDomain(dbCustomer, dbUser);
   }
 
   async findByUserId(userid: string): Promise<CustomerEntity | undefined> {
-    const dbCustomer = await this.repository.findOne({
-      where: { userid },
+    const dbUser = await this.userRepository.findOne({
+      where: { userId: userid },
     });
-    return dbCustomer ? this.toDomain(dbCustomer) : undefined;
+
+    if (!dbUser) {
+      return undefined;
+    }
+
+    const dbCustomer = await this.customerRepository.findOne({
+      where: { id: dbUser.id },
+    });
+
+    if (!dbCustomer) {
+      return undefined;
+    }
+
+    return this.toCustomerDomain(dbCustomer, dbUser);
   }
 
-  private toDomain(dbCustomer: CustomerPersistenceEntity): CustomerEntity {
+  private toCustomerDomain(
+    dbCustomer: CustomerPersistenceEntity,
+    dbUser: UserPersistenceEntity,
+  ): CustomerEntity {
     return CustomerEntity.create(
-      dbCustomer.id,
-      dbCustomer.name,
-      dbCustomer.surname,
-      dbCustomer.email,
+      dbUser.id,
+      dbUser.name,
+      dbUser.surname,
+      dbUser.email,
       dbCustomer.companyName,
       dbCustomer.taxDomicile,
       dbCustomer.NIF,
-      dbCustomer.userid,
-      dbCustomer.password,
+      dbUser.userId,
+      dbUser.password,
     );
   }
 }

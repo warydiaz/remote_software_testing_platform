@@ -1,31 +1,20 @@
-import { Entity, PrimaryColumn, Column } from 'typeorm';
-
+import { Column, Entity, JoinColumn, OneToOne, PrimaryColumn } from 'typeorm';
+import { UserPersistenceEntity } from './user.persistence.entity';
 @Entity('customers')
 export class CustomerPersistenceEntity {
   @PrimaryColumn()
-  NIF: string;
-
-  @Column()
   id: string;
 
-  @Column()
-  name: string;
+  @OneToOne(() => UserPersistenceEntity)
+  @JoinColumn({ name: 'id' })
+  user: UserPersistenceEntity;
 
   @Column()
-  surname: string;
-
-  @Column({ unique: true })
-  email: string;
+  NIF: string;
 
   @Column()
   companyName: string;
 
   @Column()
   taxDomicile: string;
-
-  @Column()
-  userid: string;
-
-  @Column()
-  password: string;
 }
