@@ -5,15 +5,6 @@ export class TesterPersistenceEntity {
   @PrimaryColumn({ type: 'varchar', length: 100 })
   id: string;
 
-  @Column({ type: 'varchar', length: 100 })
-  name: string;
-
-  @Column({ type: 'varchar', length: 100 })
-  surname: string;
-
-  @Column({ type: 'varchar', length: 100 })
-  email: string;
-
   @Column({ type: 'date', name: 'birth_date' })
   birthDate: Date;
 
@@ -34,10 +25,4 @@ export class TesterPersistenceEntity {
 
   @Column({ type: 'int', array: true, nullable: true })
   interests: number[]; // array de IDs de testing_interest
-
-  @Column({ type: 'varchar', length: 100, name: 'userid' })
-  userId: string;
-
-  @Column({ type: 'varchar', length: 100, name: 'password' })
-  password: string;
 }

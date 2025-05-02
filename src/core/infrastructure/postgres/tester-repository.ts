@@ -5,21 +5,30 @@ import { TesterPersistenceEntity } from './entities/tester.persistence.entity';
 import { TesterRepository } from '../../domain/tester/tester.repository';
 import { TesterEntity } from '../../domain/tester/tester.entity';
 import { Email } from 'src/core/domain/email';
+import { UserPersistenceEntity } from './entities/user.persistence.entity';
 
 @Injectable()
 export class TesterTypeOrmRepository implements TesterRepository {
   constructor(
     @InjectRepository(TesterPersistenceEntity)
-    private readonly repository: Repository<TesterPersistenceEntity>,
+    private readonly testerRepository: Repository<TesterPersistenceEntity>,
+    private readonly userRepository: Repository<UserPersistenceEntity>,
   ) {}
 
   // eslint-disable-next-line @typescript-eslint/no-misused-promises
   async save(tester: TesterEntity): Promise<void> {
+    const user = new UserPersistenceEntity();
+    user.id = tester.id.value;
+    user.userId = tester.userId;
+    user.email = tester.email.value;
+    user.name = tester.name.value;
+    user.surname = tester.surname.value;
+    user.password = tester.password;
+
+    await this.userRepository.save(user);
+
     const dbTester = new TesterPersistenceEntity();
     dbTester.id = tester.id.value;
-    dbTester.name = tester.name.value;
-    dbTester.surname = tester.surname.value;
-    dbTester.email = tester.email.value;
     dbTester.birthDate = tester.birthDate.value;
     dbTester.languages = tester.language;
     dbTester.city = tester.city;
@@ -27,34 +36,57 @@ export class TesterTypeOrmRepository implements TesterRepository {
     dbTester.country = tester.country;
     dbTester.experienceLevel = tester.experienceLevel;
     dbTester.interests = tester.interests.map((i) => i);
-    dbTester.userId = tester.userId;
-    dbTester.password = tester.password;
 
-    await this.repository.save(dbTester);
+    await this.testerRepository.save(dbTester);
   }
 
-  async findByEmail(email: Email): Promise<TesterEntity[]> {
-    const dbTesters = await this.repository.find({
+  async findByEmail(email: Email): Promise<TesterEntity | undefined> {
+    const dbUser = await this.userRepository.findOne({
       where: { email: email.value },
     });
 
-    return dbTesters.map(this.toDomain);
-  }
-
-  async findByUserId(userId: string): Promise<TesterEntity[]> {
-    const dbTesters = await this.repository.find({
-      where: { userId: userId },
+    if (!dbUser) {
+      return undefined;
+    }
+    const dbTesters = await this.testerRepository.find({
+      where: { id: dbUser.id },
     });
 
-    return dbTesters.map(this.toDomain);
+    if (!dbTesters) {
+      return undefined;
+    }
+
+    return this.testerToDomain(dbTesters[0], dbUser);
   }
 
-  private toDomain = (dbTester: TesterPersistenceEntity): TesterEntity => {
+  async findByUserId(userId: string): Promise<TesterEntity | undefined> {
+    const dbUser = await this.userRepository.findOne({
+      where: { id: userId },
+    });
+
+    if (!dbUser) {
+      return undefined;
+    }
+    const dbTesters = await this.testerRepository.find({
+      where: { id: dbUser.id },
+    });
+
+    if (!dbTesters) {
+      return undefined;
+    }
+
+    return this.testerToDomain(dbTesters[0], dbUser);
+  }
+
+  private testerToDomain = (
+    dbTester: TesterPersistenceEntity,
+    dbUser: UserPersistenceEntity,
+  ): TesterEntity => {
     return TesterEntity.create(
-      dbTester.id,
-      dbTester.name,
-      dbTester.surname,
-      dbTester.email,
+      dbUser.id,
+      dbUser.name,
+      dbUser.surname,
+      dbUser.email,
       dbTester.birthDate,
       dbTester.languages,
       dbTester.city,
@@ -62,8 +94,8 @@ export class TesterTypeOrmRepository implements TesterRepository {
       dbTester.country,
       dbTester.experienceLevel,
       dbTester.interests,
-      dbTester.userId,
-      dbTester.password,
+      dbUser.userId,
+      dbUser.password,
     );
   };
 }
