@@ -61,13 +61,9 @@ export class CustomerTypeOrmRepository implements CustomerRepository {
   }
 
   async findByNIF(nif: NIF): Promise<CustomerEntity | undefined> {
-    console.log('nif', nif);
-
     const dbCustomer = await this.customerRepository.findOne({
       where: { nif: nif.value },
     });
-
-    console.log('dbCustomer', dbCustomer);
 
     if (!dbCustomer) {
       return undefined;
