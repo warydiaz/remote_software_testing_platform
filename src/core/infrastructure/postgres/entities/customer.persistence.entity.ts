@@ -9,12 +9,12 @@ export class CustomerPersistenceEntity {
   @JoinColumn({ name: 'id' })
   user: UserPersistenceEntity;
 
-  @Column()
-  NIF: string;
-
-  @Column()
+  @Column({ name: 'companyname' })
   companyName: string;
 
-  @Column()
+  @Column({ name: 'taxdomicile' })
   taxDomicile: string;
+
+  @Column({ name: 'nif' })
+  nif: string;
 }

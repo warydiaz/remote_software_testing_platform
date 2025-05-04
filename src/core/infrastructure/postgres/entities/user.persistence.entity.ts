@@ -5,7 +5,7 @@ export class UserPersistenceEntity {
   @PrimaryColumn()
   id: string;
 
-  @Column({ nullable: true })
+  @Column({ name: 'userid' })
   userId: string;
 
   @Column()

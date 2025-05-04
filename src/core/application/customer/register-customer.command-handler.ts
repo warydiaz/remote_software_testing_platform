@@ -22,8 +22,12 @@ export class RegisterCustomerCommandHandler {
   saltRounds: number = parseInt(process.env.SALT_ROUNDS ?? '10');
 
   async handle(command: RegisterCustomerCommand) {
+
+    console.log('command', command);
     const nif = NIF.create(command.NIF);
     const email = Email.create(command.email);
+
+    console.log('Hay nif', await this.repository.findByNIF(nif));
 
     if (await this.repository.findByNIF(nif)) {
       throw CustomerAlreadyExistsError.withNif(command.NIF);
@@ -50,6 +54,8 @@ export class RegisterCustomerCommandHandler {
       command.userId,
       hashedPassword,
     );
+
+    console.log('customer', customer);
 
     await this.repository.save(customer);
   }

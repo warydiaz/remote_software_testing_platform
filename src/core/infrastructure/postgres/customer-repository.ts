@@ -29,13 +29,17 @@ export class CustomerTypeOrmRepository implements CustomerRepository {
     user.surname = customer.surname.value;
     user.password = customer.password;
 
+    console.log('user', user);
+
     await this.userRepository.save(user);
 
     const dbCustomer = new CustomerPersistenceEntity();
     dbCustomer.id = customer.id.value;
     dbCustomer.companyName = customer.companyName.value;
     dbCustomer.taxDomicile = customer.taxDomicile.value;
-    dbCustomer.NIF = customer.NIF.value;
+    dbCustomer.nif = customer.NIF.value;
+
+    console.log('customer', dbCustomer);
 
     await this.customerRepository.save(dbCustomer);
   }
@@ -57,9 +61,13 @@ export class CustomerTypeOrmRepository implements CustomerRepository {
   }
 
   async findByNIF(nif: NIF): Promise<CustomerEntity | undefined> {
+    console.log('nif', nif);
+
     const dbCustomer = await this.customerRepository.findOne({
-      where: { NIF: nif.value },
+      where: { nif: nif.value },
     });
+
+    console.log('dbCustomer', dbCustomer);
 
     if (!dbCustomer) {
       return undefined;
@@ -126,7 +134,7 @@ export class CustomerTypeOrmRepository implements CustomerRepository {
       dbUser.email,
       dbCustomer.companyName,
       dbCustomer.taxDomicile,
-      dbCustomer.NIF,
+      dbCustomer.nif,
       dbUser.userId,
       dbUser.password,
     );
