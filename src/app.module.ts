@@ -26,6 +26,7 @@ import { CreateTesterController } from './core/ui/api/create-tester.controller';
 import { TESTER_REPOSITORY } from './core/domain/tester/tester.repository';
 import { RegisterTesterCommandHandler } from './core/application/tester/register-tester.command-handler';
 import { TesterTypeOrmRepository } from './core/infrastructure/postgres/tester-repository';
+import { UserPersistenceEntity } from './core/infrastructure/postgres/entities/user.persistence.entity';
 
 @Module({
   imports: [
@@ -37,6 +38,7 @@ import { TesterTypeOrmRepository } from './core/infrastructure/postgres/tester-r
     TypeOrmModule.forFeature([ExperiencePersistenceEntity]),
     TypeOrmModule.forFeature([InterestPersistenceEntity]),
     TypeOrmModule.forFeature([TesterPersistenceEntity]),
+    TypeOrmModule.forFeature([UserPersistenceEntity]),
   ],
   controllers: [
     CreateCustomerController,

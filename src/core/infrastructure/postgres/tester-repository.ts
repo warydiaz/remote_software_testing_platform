@@ -12,6 +12,7 @@ export class TesterTypeOrmRepository implements TesterRepository {
   constructor(
     @InjectRepository(TesterPersistenceEntity)
     private readonly testerRepository: Repository<TesterPersistenceEntity>,
+    @InjectRepository(UserPersistenceEntity)
     private readonly userRepository: Repository<UserPersistenceEntity>,
   ) {}
 

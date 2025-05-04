@@ -38,7 +38,7 @@ export class RegisterTesterCommandHandler {
     const email = Email.create(command.email);
 
     const alreadyExistTester = await this.testerRepository.findByEmail(email);
-    if (alreadyExistTester.length > 0) {
+    if (alreadyExistTester) {
       throw TesterAlreadyExistsError.withEmail(command.email);
     }
 
@@ -83,7 +83,7 @@ export class RegisterTesterCommandHandler {
       command.userId,
     );
 
-    if (existUserId.length > 0) {
+    if (existUserId) {
       throw TesterAlreadyExistsError.withUserId(command.userId);
     }
 
