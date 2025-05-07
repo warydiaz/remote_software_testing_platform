@@ -59,7 +59,5 @@ export class CreateCustomerController {
       catchError(error, response);
       return;
     }
-
-    response.set('Location', `/customers/${id}`).send();
   }
 }
