@@ -1,9 +1,16 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
 import { Body, Controller, Post, Res } from '@nestjs/common';
 import { v4 as uuidv4 } from 'uuid';
 import { Response } from 'express';
 import { catchError } from './error.handler';
 import { RegisterTesterCommandHandler } from 'src/core/application/tester/register-tester.command-handler';
 import { RegisterTesterCommand } from 'src/core/application/tester/register-tester.command';
+import { JwtService } from '@nestjs/jwt';
+import { ConfigModule } from '@nestjs/config';
+import { RedisService } from 'src/core/infrastructure/redis/redis.service';
+void ConfigModule.forRoot();
 
 export class CreateTesterDto {
   name: string;
@@ -22,7 +29,11 @@ export class CreateTesterDto {
 
 @Controller()
 export class CreateTesterController {
-  constructor(private readonly commandHandler: RegisterTesterCommandHandler) {}
+  constructor(
+    private readonly commandHandler: RegisterTesterCommandHandler,
+    private readonly jwtService: JwtService,
+    private readonly redisService: RedisService,
+  ) {}
 
   @Post('testers')
   async handle(@Body() request: CreateTesterDto, @Res() response: Response) {
@@ -46,11 +57,18 @@ export class CreateTesterController {
           request.password,
         ),
       );
+
+      const token = this.jwtService.sign(
+        { sub: id, email: request.email },
+        { secret: process.env.JWT_SECRET, expiresIn: '1h' },
+      );
+
+      await this.redisService.set(`auth_token:${id}`, token, 'EX', 3600);
+
+      response.status(201).set('Location', `/testers/${id}`).json({ token });
     } catch (error) {
       catchError(error, response);
       return;
     }
-
-    response.set('Location', `/testers/${id}`).send();
   }
 }

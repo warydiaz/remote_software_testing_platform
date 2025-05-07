@@ -4,6 +4,10 @@ import { RegisterCustomerCommand } from '../../application/customer/register-cus
 import { v4 as uuidv4 } from 'uuid';
 import { Response } from 'express';
 import { catchError } from './error.handler';
+import { JwtService } from '@nestjs/jwt';
+import { ConfigModule } from '@nestjs/config';
+import { RedisService } from 'src/core/infrastructure/redis/redis.service';
+void ConfigModule.forRoot();
 
 export class CreateCustomerDto {
   name: string;
@@ -20,6 +24,8 @@ export class CreateCustomerDto {
 export class CreateCustomerController {
   constructor(
     private readonly commandHandler: RegisterCustomerCommandHandler,
+    private readonly jwtService: JwtService,
+    private readonly redisService: RedisService,
   ) {}
 
   @Post('customers')
@@ -40,6 +46,15 @@ export class CreateCustomerController {
           request.password,
         ),
       );
+
+      const token = this.jwtService.sign(
+        { sub: id, email: request.email },
+        { secret: process.env.JWT_SECRET, expiresIn: '1h' },
+      );
+
+      await this.redisService.set(`auth_token:${id}`, token, 'EX', 3600);
+
+      response.status(201).set('Location', `/customers/${id}`).json({ token });
     } catch (error) {
       catchError(error, response);
       return;

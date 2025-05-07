@@ -27,6 +27,9 @@ import { TESTER_REPOSITORY } from './core/domain/tester/tester.repository';
 import { RegisterTesterCommandHandler } from './core/application/tester/register-tester.command-handler';
 import { TesterTypeOrmRepository } from './core/infrastructure/postgres/tester-repository';
 import { UserPersistenceEntity } from './core/infrastructure/postgres/entities/user.persistence.entity';
+import { RedisModule } from './core/infrastructure/redis/redis.module';
+import { JwtModule } from '@nestjs/jwt';
+void ConfigModule.forRoot();
 
 @Module({
   imports: [
@@ -39,6 +42,11 @@ import { UserPersistenceEntity } from './core/infrastructure/postgres/entities/u
     TypeOrmModule.forFeature([InterestPersistenceEntity]),
     TypeOrmModule.forFeature([TesterPersistenceEntity]),
     TypeOrmModule.forFeature([UserPersistenceEntity]),
+    JwtModule.register({
+      secret: process.env.JWT_SECRET,
+      signOptions: { expiresIn: '1h' },
+    }),
+    RedisModule,
   ],
   controllers: [
     CreateCustomerController,

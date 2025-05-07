@@ -29,8 +29,6 @@ export class CustomerTypeOrmRepository implements CustomerRepository {
     user.surname = customer.surname.value;
     user.password = customer.password;
 
-    console.log('user', user);
-
     await this.userRepository.save(user);
 
     const dbCustomer = new CustomerPersistenceEntity();
@@ -38,8 +36,6 @@ export class CustomerTypeOrmRepository implements CustomerRepository {
     dbCustomer.companyName = customer.companyName.value;
     dbCustomer.taxDomicile = customer.taxDomicile.value;
     dbCustomer.nif = customer.NIF.value;
-
-    console.log('customer', dbCustomer);
 
     await this.customerRepository.save(dbCustomer);
   }
