@@ -7,6 +7,7 @@ import { catchError } from './error.handler';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigModule } from '@nestjs/config';
 import { RedisService } from 'src/core/infrastructure/redis/redis.service';
+import { Throttle } from '@nestjs/throttler';
 void ConfigModule.forRoot();
 
 export class CreateCustomerDto {
@@ -28,6 +29,7 @@ export class CreateCustomerController {
     private readonly redisService: RedisService,
   ) {}
 
+  @Throttle({ default: { limit: 5, ttl: 60 } })
   @Post('customers')
   async handle(@Body() request: CreateCustomerDto, @Res() response: Response) {
     const id = uuidv4();

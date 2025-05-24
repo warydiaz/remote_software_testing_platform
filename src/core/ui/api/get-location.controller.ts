@@ -3,6 +3,7 @@ import { Response } from 'express';
 import { catchError } from './error.handler';
 import { GetCountriesHandler } from '../../application/location/get-countries-command-handler';
 import { GetLanguagesHandler } from 'src/core/application/location/get-languages-command-handler';
+import { Throttle } from '@nestjs/throttler';
 
 @Controller()
 export class GetLocationController {
@@ -11,6 +12,7 @@ export class GetLocationController {
     private readonly commandHandlerLanguages: GetLanguagesHandler,
   ) {}
 
+  @Throttle({ default: { limit: 5, ttl: 60 } })
   @Get('countries')
   async handleCountries(@Res() response: Response) {
     try {
@@ -21,6 +23,7 @@ export class GetLocationController {
     }
   }
 
+  @Throttle({ default: { limit: 5, ttl: 60 } })
   @Get('languages')
   async handleLanguages(@Res() response: Response) {
     try {

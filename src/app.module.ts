@@ -29,6 +29,7 @@ import { TesterTypeOrmRepository } from './core/infrastructure/postgres/tester-r
 import { UserPersistenceEntity } from './core/infrastructure/postgres/entities/user.persistence.entity';
 import { RedisModule } from './core/infrastructure/redis/redis.module';
 import { JwtModule } from '@nestjs/jwt';
+import { ThrottlerModule } from '@nestjs/throttler';
 void ConfigModule.forRoot();
 
 @Module({
@@ -47,6 +48,14 @@ void ConfigModule.forRoot();
       signOptions: { expiresIn: '1h' },
     }),
     RedisModule,
+    ThrottlerModule.forRoot({
+      throttlers: [
+        {
+          ttl: 60,
+          limit: 10,
+        },
+      ],
+    }),
   ],
   controllers: [
     CreateCustomerController,
