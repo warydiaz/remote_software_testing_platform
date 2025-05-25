@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { APP_GUARD } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { typeOrmConfig } from './core/config/typeorm.config';
@@ -29,7 +30,7 @@ import { TesterTypeOrmRepository } from './core/infrastructure/postgres/tester-r
 import { UserPersistenceEntity } from './core/infrastructure/postgres/entities/user.persistence.entity';
 import { RedisModule } from './core/infrastructure/redis/redis.module';
 import { JwtModule } from '@nestjs/jwt';
-import { ThrottlerModule } from '@nestjs/throttler';
+import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 void ConfigModule.forRoot();
 
 @Module({
@@ -51,8 +52,8 @@ void ConfigModule.forRoot();
     ThrottlerModule.forRoot({
       throttlers: [
         {
-          ttl: 60,
-          limit: 10,
+          ttl: 20000,
+          limit: 2,
         },
       ],
     }),
@@ -92,6 +93,10 @@ void ConfigModule.forRoot();
     {
       provide: PROFESSIONAL_PROFILE_REPOSITORY,
       useClass: ProfessionalProfileTypeOrmRepository,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard,
     },
   ],
 })

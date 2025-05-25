@@ -10,7 +10,6 @@ import { RegisterTesterCommand } from 'src/core/application/tester/register-test
 import { JwtService } from '@nestjs/jwt';
 import { ConfigModule } from '@nestjs/config';
 import { RedisService } from 'src/core/infrastructure/redis/redis.service';
-import { Throttle } from '@nestjs/throttler';
 void ConfigModule.forRoot();
 
 export class CreateTesterDto {
@@ -36,7 +35,6 @@ export class CreateTesterController {
     private readonly redisService: RedisService,
   ) {}
 
-  @Throttle({ default: { limit: 5, ttl: 60 } })
   @Post('testers')
   async handle(@Body() request: CreateTesterDto, @Res() response: Response) {
     const id = uuidv4();
