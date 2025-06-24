@@ -452,7 +452,6 @@ CREATE TABLE IF NOT EXISTS "user" (
     password TEXT NOT NULL
 );
 
-
 CREATE TABLE IF NOT EXISTS tester (
     id VARCHAR(100) PRIMARY KEY REFERENCES "user"(id),
     birth_date DATE NOT NULL CHECK (birth_date <= CURRENT_DATE - INTERVAL '18 years'),
@@ -470,4 +469,35 @@ CREATE TABLE IF NOT EXISTS customers (
   companyName VARCHAR(100) NOT NULL,
   taxDomicile VARCHAR(150) NOT NULL,
   id VARCHAR(100) PRIMARY KEY REFERENCES "user"(id)
+);
+
+CREATE TABLE project (
+  id VARCHAR(100) PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  description TEXT,
+  email VARCHAR(255) NOT NULL,
+  product VARCHAR(100) NOT NULL,
+  start_date DATE NOT NULL,
+  end_date DATE NOT NULL
+);
+
+CREATE TABLE project_test_type (
+  id VARCHAR(100) PRIMARY KEY,
+  name VARCHAR(255) NOT NULL
+);
+
+INSERT INTO project_test_type (id, name) VALUES
+  ('1', 'Unit Test'),
+  ('2', 'Integration Test'),
+  ('3', 'System Test'),
+  ('4', 'Acceptance Test'),
+  ('5', 'Performance Test'),
+  ('6', 'Security Test'),
+  ('7', 'Regression Test'),
+  ('8', 'Smoke Test');
+
+CREATE TABLE project_test_type_mapping (
+  project_id VARCHAR(100) REFERENCES project(id) ON DELETE CASCADE,
+  test_type_id VARCHAR(100) REFERENCES project_test_type(id) ON DELETE CASCADE,
+  PRIMARY KEY (project_id, test_type_id)
 );

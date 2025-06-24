@@ -45,7 +45,7 @@ services:
       REDIS_PORT: 6379
     networks:
       - backend
-    command: npm run start:dev  # o "node dist/main" si estás en producción
+    command: npm run start:dev
 
 volumes:
   pg_data:

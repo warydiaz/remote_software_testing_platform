@@ -8,7 +8,7 @@ async function bootstrap() {
   app.useGlobalFilters(new ThrottlerExceptionFilter());
 
   app.enableCors({
-    origin: 'http://localhost:3000', // o '*' si querés permitir todos los orígenes (no recomendado en producción)
+    origin: '*', // o '*' si querés permitir todos los orígenes (no recomendado en producción)
     credentials: true, // si estás usando cookies o headers con auth
   });
 

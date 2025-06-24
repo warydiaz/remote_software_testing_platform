@@ -8,7 +8,7 @@ import {
 } from '@nestjs/common';
 import { ThrottlerException } from '@nestjs/throttler';
 import { Response } from 'express';
-import { TooManyRequestsError } from '../errors/too-many-requests.error';
+import { TooManyRequestsError } from '../errors/unauthorized-exception.error';
 import { ErrorResponse } from '../../ui/api/error.handler';
 
 @Catch(ThrottlerException)

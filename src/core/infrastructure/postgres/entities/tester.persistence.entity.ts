@@ -9,7 +9,7 @@ export class TesterPersistenceEntity {
   birthDate: Date;
 
   @Column({ type: 'int', nullable: true })
-  languages: number; // referencia a languages(id)
+  languages: number;
 
   @Column({ type: 'varchar', length: 100, nullable: true })
   city: string;
@@ -18,11 +18,11 @@ export class TesterPersistenceEntity {
   postalCode: string;
 
   @Column({ type: 'int', nullable: true })
-  country: number; // referencia a countries(id)
+  country: number;
 
   @Column({ type: 'int', name: 'experience_level', nullable: true })
-  experienceLevel: number; // referencia a experience(id)
+  experienceLevel: number;
 
   @Column({ type: 'int', array: true, nullable: true })
-  interests: number[]; // array de IDs de testing_interest
+  interests: number[];
 }

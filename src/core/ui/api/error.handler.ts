@@ -7,7 +7,7 @@ import { InvalidEmailError } from 'src/core/domain/customer/invalid-email.error'
 import { InvalidBirthDateError } from 'src/core/domain/tester/invalid-birthdate.error';
 import { TesterAlreadyExistsError } from 'src/core/application/tester/tester-already-exists.error';
 import { TooManyRequestsError } from 'src/core/infrastructure/errors/too-many-requests.error';
-import { ThrottlerException } from '@nestjs/throttler';
+import { UnauthorizedExceptionError } from 'src/core/infrastructure/errors/unauthorized-exception.error';
 
 export class ErrorResponse {
   code: string;
@@ -49,8 +49,11 @@ export const catchError = (error: Error, response: Response) => {
     response.status(400).json(ErrorResponse.fromBaseError(error));
   }
 
-  if (error instanceof ThrottlerException) {
-    const mapped = new TooManyRequestsError();
-    return response.status(429).json(ErrorResponse.fromBaseError(mapped));
+  if (error instanceof UnauthorizedExceptionError) {
+    response.status(401).json(ErrorResponse.fromBaseError(error));
+  }
+
+  if (error instanceof TooManyRequestsError) {
+    return response.status(429).json(ErrorResponse.fromBaseError(error));
   }
 };
