@@ -7,15 +7,15 @@ import { ProjectDate } from './projectDate';
 import { TestType } from './testType';
 
 export class ProjectEntity {
-  private constructor(
-    readonly id: ProjectId,
-    readonly name: ProjectName,
-    readonly description: ProjectDescription,
-    readonly email: Email,
-    readonly product: ProductProject,
-    readonly startDate: ProjectDate,
-    readonly endDate: ProjectDate,
-    readonly testTypes: TestType[],
+  constructor(
+    public readonly id: ProjectId,
+    public readonly name: ProjectName,
+    public readonly description: ProjectDescription,
+    public readonly email: Email,
+    public readonly product: ProductProject,
+    public readonly startDate: ProjectDate,
+    public readonly endDate: ProjectDate,
+    public readonly testTypes: TestType[],
   ) {}
 
   static create(
