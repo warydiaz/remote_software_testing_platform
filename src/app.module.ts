@@ -31,6 +31,15 @@ import { UserPersistenceEntity } from './core/infrastructure/postgres/entities/u
 import { RedisModule } from './core/infrastructure/redis/redis.module';
 import { JwtModule } from '@nestjs/jwt';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import { CreateProjectController } from './core/ui/api/add-project.controller';
+import { AddProjectCommandHandler } from './core/application/project/add-project.command-handler';
+import { PROJECT_REPOSITORY } from './core/domain/project/project.repository';
+import { ProjectTypeOrmRepository } from './core/infrastructure/postgres/project-repository';
+import { ProjectPersistenceEntity } from './core/infrastructure/postgres/entities/project.persistence.entity';
+import { TestTypePersistenceEntity } from './core/infrastructure/postgres/entities/testType.persistence.entity';
+import { JwtStrategy } from './core/infrastructure/auth/jwt.strategy';
+import { USER_REPOSITORY } from './core/domain/user/user.repository';
+import { UserTypeOrmRepository } from './core/infrastructure/postgres/user-repository';
 void ConfigModule.forRoot();
 
 @Module({
@@ -44,6 +53,10 @@ void ConfigModule.forRoot();
     TypeOrmModule.forFeature([InterestPersistenceEntity]),
     TypeOrmModule.forFeature([TesterPersistenceEntity]),
     TypeOrmModule.forFeature([UserPersistenceEntity]),
+    TypeOrmModule.forFeature([
+      ProjectPersistenceEntity,
+      TestTypePersistenceEntity,
+    ]),
     JwtModule.register({
       secret: process.env.JWT_SECRET,
       signOptions: { expiresIn: '1h' },
@@ -63,6 +76,7 @@ void ConfigModule.forRoot();
     GetLocationController,
     GetProfessionalProfileController,
     CreateTesterController,
+    CreateProjectController,
   ],
   providers: [
     RegisterCustomerCommandHandler,
@@ -97,6 +111,14 @@ void ConfigModule.forRoot();
     {
       provide: APP_GUARD,
       useClass: ThrottlerGuard,
+    },
+    AddProjectCommandHandler,
+    { provide: PROJECT_REPOSITORY, useClass: ProjectTypeOrmRepository },
+    { provide: CUSTOMER_REPOSITORY, useClass: CustomerTypeOrmRepository },
+    JwtStrategy,
+    {
+      provide: USER_REPOSITORY,
+      useClass: UserTypeOrmRepository,
     },
   ],
 })

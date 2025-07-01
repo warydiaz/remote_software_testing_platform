@@ -23,31 +23,15 @@ export class UserTypeOrmRepository implements UserRepository {
       return undefined;
     }
 
-    const dbCustomer = await this.userRepository.findOne({
-      where: { id: dbUser.id },
-    });
-
-    if (!dbCustomer) {
-      return undefined;
-    }
-
     return this.toUserDomain(dbUser);
   }
 
   async findByUserId(userid: string): Promise<UserEntity | undefined> {
     const dbUser = await this.userRepository.findOne({
-      where: { userId: userid },
+      where: { id: userid },
     });
 
     if (!dbUser) {
-      return undefined;
-    }
-
-    const dbCustomer = await this.userRepository.findOne({
-      where: { id: dbUser.id },
-    });
-
-    if (!dbCustomer) {
       return undefined;
     }
 

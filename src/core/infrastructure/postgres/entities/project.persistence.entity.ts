@@ -18,10 +18,10 @@ export class ProjectPersistenceEntity {
   @Column({ length: 100 })
   product: string;
 
-  @Column({ type: 'date' })
+  @Column({ type: 'date', name: 'start_date' })
   startDate: Date;
 
-  @Column({ type: 'date' })
+  @Column({ type: 'date', name: 'end_date' })
   endDate: Date;
 
   @ManyToMany(() => TestTypePersistenceEntity)
