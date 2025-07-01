@@ -501,3 +501,15 @@ CREATE TABLE project_test_type_mapping (
   test_type_id VARCHAR(100) REFERENCES project_test_type(id) ON DELETE CASCADE,
   PRIMARY KEY (project_id, test_type_id)
 );
+
+CREATE TABLE product (
+    id VARCHAR(100) NOT NULL,
+    project_id VARCHAR(100) NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    description VARCHAR(255) NOT NULL,
+    cycle_start_date DATE NOT NULL,
+    cycle_end_date DATE NOT NULL,
+    environment VARCHAR(255) NOT NULL,
+    PRIMARY KEY (id, project_id),
+    FOREIGN KEY (project_id) REFERENCES project(id)
+);
