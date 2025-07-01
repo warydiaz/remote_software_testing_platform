@@ -1,7 +1,7 @@
 import { ProjectError } from './project.error';
 
 export class TestType {
-  private constructor(private readonly value: number) {
+  private constructor(public readonly value: number) {
     if (value <= 0) {
       throw ProjectError.withInvalidTestType();
     }

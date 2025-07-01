@@ -1,7 +1,7 @@
 import { ProjectError } from './project.error';
 
 export class ProjectName {
-  private constructor(private readonly value: string) {}
+  private constructor(public readonly value: string) {}
 
   static create(name: string): ProjectName {
     if (!name || name.trim().length === 0) {
