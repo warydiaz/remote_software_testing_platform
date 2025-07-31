@@ -1,7 +1,7 @@
 import { Id } from '../id';
 
 export class ProjectId extends Id {
-  private constructor(value: string) {
+  constructor(value: string) {
     super(value);
   }
 

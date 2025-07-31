@@ -7,10 +7,10 @@ import {
 import { CustomerEntity } from '../../domain/customer/customer.entity';
 import { CustomerAlreadyExistsError } from './customer-already-exists.error';
 import { NIF } from '../../domain/customer/nif';
-import { Email } from 'src/core/domain/email';
+import { Email } from '../../domain/email';
 import * as bcrypt from 'bcrypt';
 import { ConfigModule } from '@nestjs/config';
-void ConfigModule.forRoot(); // Cargar .env
+void ConfigModule.forRoot();
 
 @Injectable()
 export class RegisterCustomerCommandHandler {
