@@ -1,8 +1,13 @@
-# Dockerfile
-FROM redis:7.2
+FROM node:22-slim
 
-# Exponer el puerto de Redis
-EXPOSE 6379
+WORKDIR /app
 
-# Comando por defecto
-CMD [ "redis-server" ]
+COPY package*.json ./
+RUN npm install
+
+COPY . .
+
+RUN npm run build
+
+EXPOSE 8080
+CMD ["node", "dist/main"]

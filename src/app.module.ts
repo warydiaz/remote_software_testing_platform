@@ -40,6 +40,7 @@ import { TestTypePersistenceEntity } from './core/infrastructure/postgres/entiti
 import { JwtStrategy } from './core/infrastructure/auth/jwt.strategy';
 import { USER_REPOSITORY } from './core/domain/user/user.repository';
 import { UserTypeOrmRepository } from './core/infrastructure/postgres/user-repository';
+import { HealthCheckController } from './core/ui/api/health-check.controler';
 void ConfigModule.forRoot();
 
 @Module({
@@ -77,6 +78,7 @@ void ConfigModule.forRoot();
     GetProfessionalProfileController,
     CreateTesterController,
     CreateProjectController,
+    HealthCheckController,
   ],
   providers: [
     RegisterCustomerCommandHandler,
