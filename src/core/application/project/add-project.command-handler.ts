@@ -8,9 +8,9 @@ import { InvalidProjectDatesError } from './Invalid-project-dates.error';
 import {
   CUSTOMER_REPOSITORY,
   CustomerRepository,
-} from 'src/core/domain/customer/customer.repository';
+} from '../../domain/customer/customer.repository';
 import { CustomerNotExistsError } from './customer-not-exists.error';
-import { Email } from 'src/core/domain/email';
+import { Email } from '../../domain/email';
 
 @Injectable()
 export class AddProjectCommandHandler {
