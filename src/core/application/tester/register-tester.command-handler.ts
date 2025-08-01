@@ -13,8 +13,8 @@ import {
   ProfessionalProfileRepository,
 } from '../../domain/professional-profile/professional-profile.repository';
 import { TesterAlreadyExistsError } from './tester-already-exists.error';
-import { Email } from 'src/core/domain/email';
-import { TesterEntity } from 'src/core/domain/tester/tester.entity';
+import { Email } from '../../domain/email';
+import { TesterEntity } from '../../domain/tester/tester.entity';
 import { LocationDoNotExistsError } from './location-do-not-exists.error';
 import { ProfessionalProfileDoNotExistsError } from './professional-profile-do-not-exists.error';
 import * as bcrypt from 'bcrypt';
