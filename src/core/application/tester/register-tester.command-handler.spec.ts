@@ -149,7 +149,6 @@ describe('RegisterTesterCommandHandler', () => {
     expect(bcrypt.hash).toHaveBeenCalledWith('password123', 10);
     expect(testerRepository.save).toHaveBeenCalled();
     const savedTester = testerRepository.save.mock.calls[0][0];
-    // Como no se usa uuid() dentro del handler, se valida el id del comando
     expect(savedTester.id.value).toBe(validUuid);
   });
 });
