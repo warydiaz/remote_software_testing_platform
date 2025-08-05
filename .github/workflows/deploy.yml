@@ -25,7 +25,8 @@ jobs:
         run: gcloud auth configure-docker europe-southwest1-docker.pkg.dev --quiet
 
       - name: Build and Push Docker Image
-        run: docker buildx build \
+        run: |
+          docker buildx build \
             --platform linux/amd64 \
             -t europe-southwest1-docker.pkg.dev/unified-booster-465912-f9/services-docker/features-docker:latest \
             --push .
