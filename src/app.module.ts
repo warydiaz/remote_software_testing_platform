@@ -1,10 +1,127 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { APP_GUARD } from '@nestjs/core';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { ConfigModule } from '@nestjs/config';
+import { typeOrmConfig } from './core/config/typeorm.config';
+import { CreateCustomerController } from './core/ui/api/create-customer.controller';
+import { RegisterCustomerCommandHandler } from './core/application/customer/register-customer.command-handler';
+import { CUSTOMER_REPOSITORY } from './core/domain/customer/customer.repository';
+import { CustomerTypeOrmRepository } from './core/infrastructure/postgres/customer-repository';
+import { CustomerPersistenceEntity } from './core/infrastructure/postgres/entities/customer.persistence.entity';
+import { CountriesPersistenceEntity } from './core/infrastructure/postgres/entities/countries.persistence.entity';
+import { GetLocationController } from './core/ui/api/get-location.controller';
+import { GetCountriesHandler } from './core/application/location/get-countries-command-handler';
+import { LOCATION_REPOSITORY } from './core/domain/location/location.repository';
+import { LocationTypeOrmRepository } from './core/infrastructure/postgres/location-repository';
+import { GetLanguagesHandler } from './core/application/location/get-languages-command-handler';
+import { LanguagesPersistenceEntity } from './core/infrastructure/postgres/entities/language.persistence.entity';
+import { ExperiencePersistenceEntity } from './core/infrastructure/postgres/entities/experience.persistence.entity';
+import { InterestPersistenceEntity } from './core/infrastructure/postgres/entities/interest.persistence.entity';
+import { GetProfessionalProfileController } from './core/ui/api/get-professional-profile.controller';
+import { GetExperienceHandler } from './core/application/professional-profile/get-tester-experience-command-handler';
+import { PROFESSIONAL_PROFILE_REPOSITORY } from './core/domain/professional-profile/professional-profile.repository';
+import { ProfessionalProfileTypeOrmRepository } from './core/infrastructure/postgres/professional-profile-repository';
+import { GetInterestHandler } from './core/application/professional-profile/get-tester-interest-command-handler';
+import { TesterPersistenceEntity } from './core/infrastructure/postgres/entities/tester.persistence.entity';
+import { CreateTesterController } from './core/ui/api/create-tester.controller';
+import { TESTER_REPOSITORY } from './core/domain/tester/tester.repository';
+import { RegisterTesterCommandHandler } from './core/application/tester/register-tester.command-handler';
+import { TesterTypeOrmRepository } from './core/infrastructure/postgres/tester-repository';
+import { UserPersistenceEntity } from './core/infrastructure/postgres/entities/user.persistence.entity';
+import { RedisModule } from './core/infrastructure/redis/redis.module';
+import { JwtModule } from '@nestjs/jwt';
+import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import { CreateProjectController } from './core/ui/api/add-project.controller';
+import { AddProjectCommandHandler } from './core/application/project/add-project.command-handler';
+import { PROJECT_REPOSITORY } from './core/domain/project/project.repository';
+import { ProjectTypeOrmRepository } from './core/infrastructure/postgres/project-repository';
+import { ProjectPersistenceEntity } from './core/infrastructure/postgres/entities/project.persistence.entity';
+import { TestTypePersistenceEntity } from './core/infrastructure/postgres/entities/testType.persistence.entity';
+import { JwtStrategy } from './core/infrastructure/auth/jwt.strategy';
+import { USER_REPOSITORY } from './core/domain/user/user.repository';
+import { UserTypeOrmRepository } from './core/infrastructure/postgres/user-repository';
+import { HealthCheckController } from './core/ui/api/health-check.controler';
+void ConfigModule.forRoot();
 
 @Module({
-  imports: [],
-  controllers: [AppController],
-  providers: [AppService],
+  imports: [
+    ConfigModule.forRoot(),
+    TypeOrmModule.forRoot(typeOrmConfig),
+    TypeOrmModule.forFeature([CustomerPersistenceEntity]),
+    TypeOrmModule.forFeature([CountriesPersistenceEntity]),
+    TypeOrmModule.forFeature([LanguagesPersistenceEntity]),
+    TypeOrmModule.forFeature([ExperiencePersistenceEntity]),
+    TypeOrmModule.forFeature([InterestPersistenceEntity]),
+    TypeOrmModule.forFeature([TesterPersistenceEntity]),
+    TypeOrmModule.forFeature([UserPersistenceEntity]),
+    TypeOrmModule.forFeature([
+      ProjectPersistenceEntity,
+      TestTypePersistenceEntity,
+    ]),
+    JwtModule.register({
+      secret: process.env.JWT_SECRET,
+      signOptions: { expiresIn: '1h' },
+    }),
+    RedisModule,
+    ThrottlerModule.forRoot({
+      throttlers: [
+        {
+          ttl: 20000,
+          limit: 2,
+        },
+      ],
+    }),
+  ],
+  controllers: [
+    CreateCustomerController,
+    GetLocationController,
+    GetProfessionalProfileController,
+    CreateTesterController,
+    CreateProjectController,
+    HealthCheckController,
+  ],
+  providers: [
+    RegisterCustomerCommandHandler,
+    { provide: CUSTOMER_REPOSITORY, useClass: CustomerTypeOrmRepository },
+    GetCountriesHandler,
+    {
+      provide: LOCATION_REPOSITORY,
+      useClass: LocationTypeOrmRepository,
+    },
+    GetLanguagesHandler,
+    {
+      provide: LOCATION_REPOSITORY,
+      useClass: LocationTypeOrmRepository,
+    },
+    GetExperienceHandler,
+    {
+      provide: PROFESSIONAL_PROFILE_REPOSITORY,
+      useClass: ProfessionalProfileTypeOrmRepository,
+    },
+    GetInterestHandler,
+    {
+      provide: PROFESSIONAL_PROFILE_REPOSITORY,
+      useClass: ProfessionalProfileTypeOrmRepository,
+    },
+    RegisterTesterCommandHandler,
+    { provide: TESTER_REPOSITORY, useClass: TesterTypeOrmRepository },
+    { provide: LOCATION_REPOSITORY, useClass: LocationTypeOrmRepository },
+    {
+      provide: PROFESSIONAL_PROFILE_REPOSITORY,
+      useClass: ProfessionalProfileTypeOrmRepository,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard,
+    },
+    AddProjectCommandHandler,
+    { provide: PROJECT_REPOSITORY, useClass: ProjectTypeOrmRepository },
+    { provide: CUSTOMER_REPOSITORY, useClass: CustomerTypeOrmRepository },
+    JwtStrategy,
+    {
+      provide: USER_REPOSITORY,
+      useClass: UserTypeOrmRepository,
+    },
+  ],
 })
 export class AppModule {}
