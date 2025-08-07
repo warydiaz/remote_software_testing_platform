@@ -1,0 +1,64 @@
+name: Restart Auth App on VMs
+
+on:
+  workflow_run:
+    workflows: ["Deploy Docker Image to Google Artifact Registry"]
+    branches: [main]
+    types:
+      - completed
+
+jobs:
+  restart-auth-app:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - instance: app-a
+            ip: 34.175.112.250
+          - instance: app-b
+            ip: 34.175.233.72
+
+    steps:
+      - name: Connect via SSH and restart container on ${{ matrix.instance }}
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ matrix.ip }}
+          username: github-actions
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            echo "Ensuring Docker is configured to use gcloud as credential helper..."
+            if ! grep -q "europe-southwest1-docker.pkg.dev" ~/.docker/config.json 2>/dev/null; then
+              echo "Configuring Docker credential helper for Artifact Registry..."
+              gcloud auth configure-docker europe-southwest1-docker.pkg.dev
+            else
+              echo "Docker is already configured for Artifact Registry."
+            fi
+
+            echo "Stopping old Docker container..."
+            docker stop features-docker || true
+            docker rm features-docker || true
+            docker rmi europe-southwest1-docker.pkg.dev/unified-booster-465912-f9/services-docker/features-docker:latest || true
+
+            echo "Running new Docker container..."
+            docker run -d \
+              --name features-docker \
+              -e DB_HOST=10.42.0.2 \
+              -e DB_PORT=5432 \
+              -e DB_USERNAME=postgres \
+              -e DB_PASSWORD=postgres \
+              -e DB_NAME=postgres \
+              -e SALT_ROUNDS=10 \
+              -e JWT_SECRET=super-secret-key-graham \
+              -e REDIS_HOST=10.115.101.204 \
+              -e REDIS_PORT=6379 \
+              -e SMTP_HOST=smtp.gmail.com \
+              -e SMTP_PORT=587 \
+              -e SMTP_USER=not.replay.nexttest@gmail.com \
+              -e SMTP_PASS='pzxd lfdl pckl fojp' \
+              -e PORT=8080 \
+              -e URL=https://nextest.santitorrabadella.com \
+              -e PORT=8080 \
+              -e PRE_FIX=api8080 \
+              -p 8080:8080 \
+              europe-southwest1-docker.pkg.dev/unified-booster-465912-f9/services-docker/features-docker:latest
