@@ -8,6 +8,7 @@ import { InvalidBirthDateError } from 'src/core/domain/tester/invalid-birthdate.
 import { TesterAlreadyExistsError } from 'src/core/application/tester/tester-already-exists.error';
 import { TooManyRequestsError } from 'src/core/infrastructure/errors/too-many-requests.error';
 import { UnauthorizedExceptionError } from 'src/core/infrastructure/errors/unauthorized-exception.error';
+import { EnvironmentNotFoundError } from 'src/core/application/product/invalid-environment-value.error';
 
 export class ErrorResponse {
   code: string;
@@ -44,7 +45,8 @@ export const catchError = (error: Error, response: Response) => {
     error instanceof InvalidFieldError ||
     error instanceof InvalidNIFError ||
     error instanceof InvalidEmailError ||
-    error instanceof InvalidBirthDateError
+    error instanceof InvalidBirthDateError ||
+    error instanceof EnvironmentNotFoundError
   ) {
     response.status(400).json(ErrorResponse.fromBaseError(error));
   }

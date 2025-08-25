@@ -41,6 +41,11 @@ import { JwtStrategy } from './core/infrastructure/auth/jwt.strategy';
 import { USER_REPOSITORY } from './core/domain/user/user.repository';
 import { UserTypeOrmRepository } from './core/infrastructure/postgres/user-repository';
 import { HealthCheckController } from './core/ui/api/health-check.controler';
+import { ProductPersistenceEntity } from './core/infrastructure/postgres/entities/product.persistence.entity';
+import { CreateProductController } from './core/ui/api/add-product.controller';
+import { PRODUCT_REPOSITORY } from './core/domain/product/product.repository';
+import { ProductTypeOrmRepository } from './core/infrastructure/postgres/product-repository';
+import { AddProductCommandHandler } from './core/application/product/add-product.command-handler';
 void ConfigModule.forRoot();
 
 @Module({
@@ -58,6 +63,7 @@ void ConfigModule.forRoot();
       ProjectPersistenceEntity,
       TestTypePersistenceEntity,
     ]),
+    TypeOrmModule.forFeature([ProductPersistenceEntity]),
     JwtModule.register({
       secret: process.env.JWT_SECRET,
       signOptions: { expiresIn: '1h' },
@@ -79,6 +85,7 @@ void ConfigModule.forRoot();
     CreateTesterController,
     CreateProjectController,
     HealthCheckController,
+    CreateProductController,
   ],
   providers: [
     RegisterCustomerCommandHandler,
@@ -117,6 +124,11 @@ void ConfigModule.forRoot();
     AddProjectCommandHandler,
     { provide: PROJECT_REPOSITORY, useClass: ProjectTypeOrmRepository },
     { provide: CUSTOMER_REPOSITORY, useClass: CustomerTypeOrmRepository },
+    AddProductCommandHandler,
+    {
+      provide: PRODUCT_REPOSITORY,
+      useClass: ProductTypeOrmRepository,
+    },
     JwtStrategy,
     {
       provide: USER_REPOSITORY,
