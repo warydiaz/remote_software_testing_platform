@@ -1,0 +1,13 @@
+import { BaseError } from '../../../error';
+
+export class InvalidProductDatesError extends BaseError {
+  private constructor(message: string) {
+    super('invalid-products-dates', message);
+  }
+
+  static endDateBeforeStartDate(start: Date, end: Date) {
+    return new InvalidProductDatesError(
+      `End date (${end.toISOString()}) cannot be before start date (${start.toISOString()})`,
+    );
+  }
+}

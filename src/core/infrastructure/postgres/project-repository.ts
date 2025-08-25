@@ -20,6 +20,7 @@ export class ProjectTypeOrmRepository implements ProjectRepository {
   async save(project: ProjectEntity): Promise<void> {
     const dbProject = new ProjectPersistenceEntity();
     dbProject.id = project.id.value;
+    dbProject.userId = project.userId.value;
     dbProject.name = project.name.value;
     dbProject.description = project.description.value;
     dbProject.email = project.email.value;
@@ -54,6 +55,15 @@ export class ProjectTypeOrmRepository implements ProjectRepository {
     return dbProject ? this.toDomain(dbProject) : undefined;
   }
 
+  async findByUserId(userId: string): Promise<ProjectEntity | undefined> {
+    const dbProject = await this.projectRepo.findOne({
+      where: { userId },
+      relations: ['testTypes'],
+    });
+
+    return dbProject ? this.toDomain(dbProject) : undefined;
+  }
+
   async findByEmail(email: Email): Promise<ProjectEntity | undefined> {
     const dbProject = await this.projectRepo.findOne({
       where: { email: email.value },
@@ -80,6 +90,7 @@ export class ProjectTypeOrmRepository implements ProjectRepository {
   private toDomain = (db: ProjectPersistenceEntity): ProjectEntity => {
     return ProjectEntity.create(
       db.id,
+      db.userId,
       db.name,
       db.description,
       db.email,

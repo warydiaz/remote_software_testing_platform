@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-call */
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ThrottlerExceptionFilter } from './core/infrastructure/filters/throttler-exception.filter';
@@ -8,8 +9,11 @@ async function bootstrap() {
   app.useGlobalFilters(new ThrottlerExceptionFilter());
 
   app.enableCors({
-    origin: '*', // o '*' si querés permitir todos los orígenes (no recomendado en producción)
-    credentials: true, // si estás usando cookies o headers con auth
+    origin: [
+      'https://nextest.santitorrabadella.com/',
+      'http://localhost:8080/',
+    ],
+    credentials: true,
   });
 
   app.setGlobalPrefix(process.env.PRE_FIX!);

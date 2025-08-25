@@ -6,6 +6,9 @@ export class ProjectPersistenceEntity {
   @PrimaryColumn({ type: 'varchar', length: 100 })
   id: string;
 
+  @PrimaryColumn({ type: 'varchar', length: 100 })
+  userId: string;
+
   @Column({ length: 255 })
   name: string;
 
