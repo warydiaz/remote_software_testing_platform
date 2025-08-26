@@ -49,6 +49,18 @@ export class AddProductCommandHandler {
       );
     }
 
+    if (
+      command.cycleStartDate < project.startDate.value ||
+      command.cycleEndDate > project.endDate.value
+    ) {
+      throw InvalidProductDatesError.outsideProjectDates(
+        project.startDate.value,
+        project.endDate.value,
+        command.cycleStartDate,
+        command.cycleEndDate,
+      );
+    }
+
     if (!command.environment) {
       throw EnvironmentNotFoundError.emptyValue();
     }
