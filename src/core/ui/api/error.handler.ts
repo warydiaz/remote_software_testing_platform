@@ -11,6 +11,8 @@ import { UnauthorizedExceptionError } from 'src/core/infrastructure/errors/unaut
 import { EnvironmentNotFoundError } from 'src/core/application/product/invalid-environment-value.error';
 import { ProjectNotFoundError } from 'src/core/application/product/project-not-found.error';
 import { ProductAlreadyExistsError } from 'src/core/application/product/product-already-exists.error';
+import { InvalidProductDatesError } from 'src/core/application/product/invalid-product-dates.error';
+import { ProjectError } from 'src/core/domain/project/project.error';
 
 export class ErrorResponse {
   code: string;
@@ -50,7 +52,9 @@ export const catchError = (error: Error, response: Response) => {
     error instanceof InvalidEmailError ||
     error instanceof InvalidBirthDateError ||
     error instanceof EnvironmentNotFoundError ||
-    error instanceof ProjectNotFoundError
+    error instanceof ProjectNotFoundError ||
+    error instanceof InvalidProductDatesError ||
+    error instanceof ProjectError
   ) {
     response.status(400).json(ErrorResponse.fromBaseError(error));
   }

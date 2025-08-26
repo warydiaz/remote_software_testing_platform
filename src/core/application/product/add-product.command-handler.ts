@@ -13,6 +13,7 @@ import { ProjectNotFoundError } from './project-not-found.error';
 import { ProductAlreadyExistsError } from './product-already-exists.error';
 import { ProjectId } from '../../domain/project/id';
 import { InvalidProductDatesError } from './invalid-product-dates.error';
+import { EnvironmentNotFoundError } from './invalid-environment-value.error';
 
 @Injectable()
 export class AddProductCommandHandler {
@@ -24,7 +25,6 @@ export class AddProductCommandHandler {
   ) {}
 
   async handle(command: AddProductCommand): Promise<void> {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const projectId = new ProjectId(command.projectId);
 
     const existingProduct = await this.productRepository.findByProjectIdAndName(
@@ -37,15 +37,20 @@ export class AddProductCommandHandler {
     }
 
     const project = await this.projectRepository.findById(projectId);
+
     if (!project) {
       throw ProjectNotFoundError.withId(command.projectId);
     }
 
-    const startDate = new Date(command.cycleStartDate);
-    const endDate = new Date(command.cycleEndDate);
+    if (command.cycleEndDate < command.cycleStartDate) {
+      throw InvalidProductDatesError.endDateBeforeStartDate(
+        command.cycleStartDate,
+        command.cycleEndDate,
+      );
+    }
 
-    if (endDate < startDate) {
-      throw InvalidProductDatesError.endDateBeforeStartDate(startDate, endDate);
+    if (!command.environment) {
+      throw EnvironmentNotFoundError.emptyValue();
     }
 
     const product = ProductEntity.create(
@@ -53,8 +58,8 @@ export class AddProductCommandHandler {
       command.projectId,
       command.name,
       command.description,
-      startDate,
-      endDate,
+      command.cycleStartDate,
+      command.cycleEndDate,
       command.environment,
     );
 

@@ -88,6 +88,9 @@ export class ProjectTypeOrmRepository implements ProjectRepository {
   }
 
   private toDomain = (db: ProjectPersistenceEntity): ProjectEntity => {
+    const startDate = new Date(db.startDate);
+    const endDate = new Date(db.endDate);
+
     return ProjectEntity.create(
       db.id,
       db.userId,
@@ -95,8 +98,8 @@ export class ProjectTypeOrmRepository implements ProjectRepository {
       db.description,
       db.email,
       db.product,
-      db.startDate,
-      db.endDate,
+      startDate,
+      endDate,
       db.testTypes?.map((tt) => parseInt(tt.id)) ?? [],
     );
   };
