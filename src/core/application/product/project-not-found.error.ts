@@ -1,7 +1,7 @@
-export class ProjectNotFoundError extends Error {
+import { BaseError } from '../../../error';
+export class ProjectNotFoundError extends BaseError {
   private constructor(message: string) {
-    super(message);
-    this.name = 'ProjectNotFoundError';
+    super('invalid-Project', message);
   }
 
   static withId(id: string): ProjectNotFoundError {

@@ -1,7 +1,7 @@
-export class ProductAlreadyExistsError extends Error {
+import { BaseError } from '../../../error';
+export class ProductAlreadyExistsError extends BaseError {
   private constructor(message: string) {
-    super(message);
-    this.name = 'ProductAlreadyExistsError';
+    super('invalid-Product', message);
   }
 
   static withIdAndProject(

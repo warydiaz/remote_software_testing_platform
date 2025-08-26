@@ -9,6 +9,8 @@ import { TesterAlreadyExistsError } from 'src/core/application/tester/tester-alr
 import { TooManyRequestsError } from 'src/core/infrastructure/errors/too-many-requests.error';
 import { UnauthorizedExceptionError } from 'src/core/infrastructure/errors/unauthorized-exception.error';
 import { EnvironmentNotFoundError } from 'src/core/application/product/invalid-environment-value.error';
+import { ProjectNotFoundError } from 'src/core/application/product/project-not-found.error';
+import { ProductAlreadyExistsError } from 'src/core/application/product/product-already-exists.error';
 
 export class ErrorResponse {
   code: string;
@@ -36,7 +38,8 @@ export const catchError = (error: Error, response: Response) => {
 
   if (
     error instanceof CustomerAlreadyExistsError ||
-    error instanceof TesterAlreadyExistsError
+    error instanceof TesterAlreadyExistsError ||
+    error instanceof ProductAlreadyExistsError
   ) {
     response.status(409).json(ErrorResponse.fromBaseError(error));
   }
@@ -46,7 +49,8 @@ export const catchError = (error: Error, response: Response) => {
     error instanceof InvalidNIFError ||
     error instanceof InvalidEmailError ||
     error instanceof InvalidBirthDateError ||
-    error instanceof EnvironmentNotFoundError
+    error instanceof EnvironmentNotFoundError ||
+    error instanceof ProjectNotFoundError
   ) {
     response.status(400).json(ErrorResponse.fromBaseError(error));
   }

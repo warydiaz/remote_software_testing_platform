@@ -28,17 +28,17 @@ export class CreateProductController {
       const startDate = new Date(request.cycleStartDate);
       const endDate = new Date(request.cycleEndDate);
 
-      const command = new AddProductCommand(
-        id,
-        request.projectId,
-        request.name,
-        request.description,
-        startDate,
-        endDate,
-        request.environment,
+      await this.commandHandler.handle(
+        new AddProductCommand(
+          id,
+          request.projectId,
+          request.name,
+          request.description,
+          startDate,
+          endDate,
+          request.environment,
+        ),
       );
-
-      await this.commandHandler.handle(command);
 
       response.status(201).set('Location', `/products/${id}`).json({ id });
     } catch (error) {
