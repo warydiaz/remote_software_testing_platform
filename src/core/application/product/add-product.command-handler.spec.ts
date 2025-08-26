@@ -28,6 +28,12 @@ describe('AddProductCommandHandler', () => {
     environment: 'dev',
   };
 
+  const mockProject = {
+    id: baseCommand.projectId,
+    startDate: { value: new Date('2025-01-01') },
+    endDate: { value: new Date('2025-12-31') },
+  };
+
   beforeEach(() => {
     productRepository = {
       findByProjectIdAndName: jest.fn(),
@@ -48,6 +54,7 @@ describe('AddProductCommandHandler', () => {
     productRepository.findByProjectIdAndName.mockResolvedValue(
       {} as ProductEntity,
     );
+    projectRepository.findById.mockResolvedValue(mockProject as any);
 
     await expect(handler.handle(baseCommand)).rejects.toBeInstanceOf(
       ProductAlreadyExistsError,
@@ -65,9 +72,7 @@ describe('AddProductCommandHandler', () => {
 
   it('should throw if endDate is before startDate', async () => {
     productRepository.findByProjectIdAndName.mockResolvedValue(null);
-    projectRepository.findById.mockResolvedValue({
-      id: baseCommand.projectId,
-    } as any);
+    projectRepository.findById.mockResolvedValue(mockProject as any);
 
     const badCommand: AddProductCommand = {
       ...baseCommand,
@@ -80,11 +85,24 @@ describe('AddProductCommandHandler', () => {
     );
   });
 
+  it('should throw if product cycle dates are outside project dates', async () => {
+    productRepository.findByProjectIdAndName.mockResolvedValue(null);
+    projectRepository.findById.mockResolvedValue(mockProject as any);
+
+    const badCommand: AddProductCommand = {
+      ...baseCommand,
+      cycleStartDate: new Date('2024-12-15'),
+      cycleEndDate: new Date('2025-01-10'),
+    };
+
+    await expect(handler.handle(badCommand)).rejects.toBeInstanceOf(
+      InvalidProductDatesError,
+    );
+  });
+
   it('should save product when all validations pass', async () => {
     productRepository.findByProjectIdAndName.mockResolvedValue(null);
-    projectRepository.findById.mockResolvedValue({
-      id: baseCommand.projectId,
-    } as any);
+    projectRepository.findById.mockResolvedValue(mockProject as any);
 
     await handler.handle(baseCommand);
 
