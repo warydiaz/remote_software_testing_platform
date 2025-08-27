@@ -513,3 +513,42 @@ CREATE TABLE product (
     PRIMARY KEY (id, project_id),
     FOREIGN KEY (project_id) REFERENCES project(id)
 );
+-- Main Test table
+CREATE TABLE test (
+    id SERIAL PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    description TEXT,
+    test_type VARCHAR(20) NOT NULL CHECK (test_type IN ('with_steps', 'without_steps', 'exploratory')),
+    priority VARCHAR(10) NOT NULL CHECK (priority IN ('high', 'medium', 'low')),
+    is_automated BOOLEAN DEFAULT FALSE,
+    is_regression BOOLEAN DEFAULT FALSE,
+    test_plan_id INT, -- FK if you have a Test Plan table
+    requirement TEXT,
+    sprint VARCHAR(50),
+    expected_result TEXT, -- used only for "without_steps"
+    created_at TIMESTAMP DEFAULT NOW(),
+    updated_at TIMESTAMP DEFAULT NOW()
+);
+
+-- Steps table for tests that have steps
+CREATE TABLE test_step (
+    id SERIAL PRIMARY KEY,
+    test_id INT NOT NULL REFERENCES test(id) ON DELETE CASCADE,
+    step_description TEXT NOT NULL,
+    expected_result TEXT,
+    step_order INT NOT NULL DEFAULT 1 -- Keeps the execution order
+);
+
+-- Trigger to auto-update updated_at
+CREATE OR REPLACE FUNCTION update_timestamp()
+RETURNS TRIGGER AS $$
+BEGIN
+   NEW.updated_at = NOW();
+   RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trg_update_timestamp
+BEFORE UPDATE ON test
+FOR EACH ROW
+EXECUTE FUNCTION update_timestamp();
