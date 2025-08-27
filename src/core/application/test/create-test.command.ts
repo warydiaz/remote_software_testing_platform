@@ -12,7 +12,7 @@ interface CreateTestCommand {
 }
 
 // For "with steps"
-class CreateTestWithStepsCommand implements CreateTestCommand {
+export class CreateTestWithStepsCommand implements CreateTestCommand {
   constructor(
     readonly title: string,
     readonly description: string,
@@ -27,7 +27,7 @@ class CreateTestWithStepsCommand implements CreateTestCommand {
 }
 
 // For "without steps"
-class CreateTestWithoutStepsCommand implements CreateTestCommand {
+export class CreateTestWithoutStepsCommand implements CreateTestCommand {
   constructor(
     readonly title: string,
     readonly description: string,
@@ -42,7 +42,7 @@ class CreateTestWithoutStepsCommand implements CreateTestCommand {
 }
 
 // For "exploratory"
-class CreateExploratoryTestCommand implements CreateTestCommand {
+export class CreateExploratoryTestCommand implements CreateTestCommand {
   constructor(
     readonly title: string,
     readonly description: string,
