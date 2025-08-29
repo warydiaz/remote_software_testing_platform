@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/restrict-template-expressions */
 import { BaseError } from '../../../error';
 
 export class InvalidStepError extends BaseError {
