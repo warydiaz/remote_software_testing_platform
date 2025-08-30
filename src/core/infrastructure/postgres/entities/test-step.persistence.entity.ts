@@ -15,8 +15,8 @@ export class TestStepPersistenceEntity {
   @Column({ type: 'text', name: 'step_description' })
   stepDescription: string;
 
-  @Column({ type: 'text', nullable: true, name: 'expected_result' })
-  expectedResult?: string;
+  @Column({ type: 'text', name: 'expected_result' })
+  expectedResult: string;
 
   @Column({ type: 'int', name: 'step_order', default: 1 })
   stepOrder: number;

@@ -1,18 +1,22 @@
-import { TestError } from './test.error';
+import { InvalidPriorityError } from './invalid-test-priority.error';
+
+export type PriorityType = 'high' | 'medium' | 'low';
 
 export class TestPriority {
-  private constructor(public readonly value: string) {}
+  private constructor(public readonly value: PriorityType) {}
 
   static create(priority: string): TestPriority {
     if (!priority || priority.trim().length === 0) {
-      throw TestError.withEmptyPriority();
+      throw InvalidPriorityError.withEmptyPriority();
     }
 
-    const validPriorities = ['high', 'medium', 'low'];
-    if (!validPriorities.includes(priority.trim())) {
-      throw TestError.withInvalidPriority(priority);
+    const validPriorities: PriorityType[] = ['high', 'medium', 'low'];
+    const normalized = priority.trim() as PriorityType;
+
+    if (!validPriorities.includes(normalized)) {
+      throw InvalidPriorityError.withInvalidPriority(priority);
     }
 
-    return new TestPriority(priority.trim());
+    return new TestPriority(normalized);
   }
 }

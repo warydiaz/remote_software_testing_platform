@@ -11,13 +11,13 @@ import { TestStepPersistenceEntity } from './test-step.persistence.entity';
 @Entity('test')
 export class TestPersistenceEntity {
   @PrimaryGeneratedColumn()
-  id: number;
+  id: string;
 
   @Column({ length: 255 })
   title: string;
 
-  @Column({ type: 'text', nullable: true })
-  description?: string;
+  @Column({ type: 'text' })
+  description: string;
 
   @Column({
     type: 'varchar',
@@ -37,16 +37,13 @@ export class TestPersistenceEntity {
   @Column({ type: 'boolean', default: false })
   isRegression: boolean;
 
-  @Column({ type: 'int', nullable: true, name: 'test_plan_id' })
-  testPlanId?: number;
+  @Column({ type: 'text' })
+  requirement: string;
 
-  @Column({ type: 'text', nullable: true })
-  requirement?: string;
+  @Column({ type: 'varchar', length: 50 })
+  sprint: string;
 
-  @Column({ type: 'varchar', length: 50, nullable: true })
-  sprint?: string;
-
-  @Column({ type: 'text', nullable: true, name: 'expected_result' })
+  @Column({ type: 'text', name: 'expected_result', nullable: true })
   expectedResult?: string;
 
   @CreateDateColumn({ name: 'created_at', type: 'timestamp' })

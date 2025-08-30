@@ -7,7 +7,7 @@ export class InvalidStepError extends BaseError {
 
   static invalidStep(): InvalidStepError {
     return new InvalidStepError(
-      'Step description and expected result are required',
+      'Step order, description and expected result are required',
     );
   }
 }

@@ -5,16 +5,6 @@ export class TestError extends BaseError {
     super('test-error', message);
   }
 
-  static withInvalidPriority(name: string): TestError {
-    return new TestError(
-      `Invalid priority value: ${name}, this must be: high, medium, low`,
-    );
-  }
-
-  static withEmptyPriority(): TestError {
-    return new TestError(`Test priority cannot be empty`);
-  }
-
   static withInvalidTitle(): TestError {
     return new TestError(`Test title cannot be empty`);
   }
