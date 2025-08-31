@@ -15,7 +15,7 @@ export class CreateTestWithStepsHandler {
     private readonly testRepository: TestRepository,
   ) {}
 
-  async execute(command: CreateTestWithStepsCommand): Promise<void> {
+  async handle(command: CreateTestWithStepsCommand): Promise<void> {
     const domainSteps = this.getSteps(command.steps);
 
     const test = TestEntity.createWithSteps(
@@ -35,7 +35,7 @@ export class CreateTestWithStepsHandler {
 
   private getSteps(steps: any[]): TestStep[] {
     return steps.map(
-      (step) => new TestStep(step.description, step.expectedResult),
+      (step) => new TestStep(step.order, step.description, step.expectedResult),
     );
   }
 }

@@ -12,7 +12,7 @@ export class CreateTestWithoutStepsHandler {
     private readonly testRepository: TestRepository,
   ) {}
 
-  async execute(command: CreateTestWithoutStepsCommand): Promise<void> {
+  async handle(command: CreateTestWithoutStepsCommand): Promise<void> {
     const test = TestEntity.createWithoutSteps(
       command.id,
       command.title,

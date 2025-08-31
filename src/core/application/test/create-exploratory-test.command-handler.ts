@@ -12,7 +12,7 @@ export class CreateExploratoryTestHandler {
     private readonly testRepository: TestRepository,
   ) {}
 
-  async execute(command: CreateExploratoryTestCommand): Promise<void> {
+  async handle(command: CreateExploratoryTestCommand): Promise<void> {
     const test = TestEntity.createExploratory(
       command.id,
       command.title,
