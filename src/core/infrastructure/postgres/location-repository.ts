@@ -2,10 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CountryEntity } from '../../domain/location/country.entity';
-import { LocationRepository } from 'src/core/domain/location/location.repository';
+import { LocationRepository } from '../../domain/location/location.repository';
 import { CountriesPersistenceEntity } from './entities/countries.persistence.entity';
 import { LanguagesPersistenceEntity } from './entities/language.persistence.entity';
-import { LanguageEntity } from 'src/core/domain/location/language.entity';
+import { LanguageEntity } from '../../domain/location/language.entity';
 
 @Injectable()
 export class LocationTypeOrmRepository implements LocationRepository {

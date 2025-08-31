@@ -13,7 +13,7 @@ import { AddProjectCommandHandler } from '../../application/project/add-project.
 import { AddProjectCommand } from '../../application/project/add-project.command';
 import { v4 as uuidv4 } from 'uuid';
 import { catchError } from './error.handler';
-import { JwtAuthGuard } from 'src/core/infrastructure/auth/jwt-auth.guard';
+import { JwtAuthGuard } from '../../infrastructure/auth/jwt-auth.guard';
 
 export class CreateProjectDto {
   name: string;

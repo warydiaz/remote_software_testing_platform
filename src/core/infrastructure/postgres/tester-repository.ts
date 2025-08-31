@@ -4,7 +4,7 @@ import { Repository } from 'typeorm';
 import { TesterPersistenceEntity } from './entities/tester.persistence.entity';
 import { TesterRepository } from '../../domain/tester/tester.repository';
 import { TesterEntity } from '../../domain/tester/tester.entity';
-import { Email } from 'src/core/domain/email';
+import { Email } from '../../domain/email';
 import { UserPersistenceEntity } from './entities/user.persistence.entity';
 
 @Injectable()

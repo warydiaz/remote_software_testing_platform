@@ -6,7 +6,7 @@ import { Response } from 'express';
 import { catchError } from './error.handler';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigModule } from '@nestjs/config';
-import { RedisService } from 'src/core/infrastructure/redis/redis.service';
+import { RedisService } from '../../infrastructure/redis/redis.service';
 void ConfigModule.forRoot();
 
 export class CreateCustomerDto {

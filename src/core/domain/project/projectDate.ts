@@ -1,5 +1,3 @@
-// src/core/domain/project/projectDate.ts
-
 import { ProjectError } from './project.error';
 
 export class ProjectDate {

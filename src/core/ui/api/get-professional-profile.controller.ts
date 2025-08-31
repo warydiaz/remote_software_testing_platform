@@ -1,8 +1,8 @@
 import { Controller, Get, Res } from '@nestjs/common';
 import { Response } from 'express';
 import { catchError } from './error.handler';
-import { GetInterestHandler } from 'src/core/application/professional-profile/get-tester-interest-command-handler';
-import { GetExperienceHandler } from 'src/core/application/professional-profile/get-tester-experience-command-handler';
+import { GetInterestHandler } from '../../application/professional-profile/get-tester-interest-command-handler';
+import { GetExperienceHandler } from '../../application/professional-profile/get-tester-experience-command-handler';
 
 @Controller()
 export class GetProfessionalProfileController {

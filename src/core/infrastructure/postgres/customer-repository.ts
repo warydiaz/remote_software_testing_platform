@@ -7,7 +7,7 @@ import { CustomerRepository } from '../../domain/customer/customer.repository';
 import { CustomerEntity } from '../../domain/customer/customer.entity';
 import { CustomerId } from '../../domain/customer/id';
 import { NIF } from '../../domain/customer/nif';
-import { Email } from 'src/core/domain/email';
+import { Email } from '../../domain/email';
 import { UserPersistenceEntity } from './entities/user.persistence.entity';
 
 @Injectable()

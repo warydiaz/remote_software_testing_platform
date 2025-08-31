@@ -9,7 +9,7 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 import {
   USER_REPOSITORY,
   UserRepository,
-} from 'src/core/domain/user/user.repository';
+} from '../../domain/user/user.repository';
 import { UnauthorizedExceptionError } from '../errors/unauthorized-exception.error';
 
 @Injectable()

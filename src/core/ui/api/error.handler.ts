@@ -1,19 +1,21 @@
 import { Response } from 'express';
 import { CustomerAlreadyExistsError } from '../../application/customer/customer-already-exists.error';
 import { BaseError } from '../../../error';
-import { InvalidFieldError } from 'src/core/domain/invalid-field.error';
-import { InvalidNIFError } from 'src/core/domain/customer/invalid-nif.error';
-import { InvalidEmailError } from 'src/core/domain/customer/invalid-email.error';
-import { InvalidBirthDateError } from 'src/core/domain/tester/invalid-birthdate.error';
-import { TesterAlreadyExistsError } from 'src/core/application/tester/tester-already-exists.error';
-import { TooManyRequestsError } from 'src/core/infrastructure/errors/too-many-requests.error';
-import { UnauthorizedExceptionError } from 'src/core/infrastructure/errors/unauthorized-exception.error';
-import { EnvironmentNotFoundError } from 'src/core/application/product/invalid-environment-value.error';
-import { ProjectNotFoundError } from 'src/core/application/product/project-not-found.error';
-import { ProductAlreadyExistsError } from 'src/core/application/product/product-already-exists.error';
-import { InvalidProductDatesError } from 'src/core/application/product/invalid-product-dates.error';
-import { ProjectError } from 'src/core/domain/project/project.error';
-import { InvalidStepError } from 'src/core/domain/test/invalid-test-step.error';
+import { InvalidFieldError } from '../../domain/invalid-field.error';
+import { InvalidNIFError } from '../../domain/customer/invalid-nif.error';
+import { InvalidEmailError } from '../../domain/customer/invalid-email.error';
+import { InvalidBirthDateError } from '../../domain/tester/invalid-birthdate.error';
+import { TesterAlreadyExistsError } from '../../application/tester/tester-already-exists.error';
+import { TooManyRequestsError } from '../../infrastructure/errors/too-many-requests.error';
+import { UnauthorizedExceptionError } from '../../infrastructure/errors/unauthorized-exception.error';
+import { EnvironmentNotFoundError } from '../../application/product/invalid-environment-value.error';
+import { ProjectNotFoundError } from '../../application/product/project-not-found.error';
+import { ProductAlreadyExistsError } from '../../application/product/product-already-exists.error';
+import { InvalidProductDatesError } from '../../application/product/invalid-product-dates.error';
+import { ProjectError } from '../../domain/project/project.error';
+import { InvalidStepError } from '../../domain/test/invalid-test-step.error';
+import { InvalidPriorityError } from '../../domain/test/invalid-test-priority.error';
+import { TestError } from '../../domain/test/test.error';
 
 export class ErrorResponse {
   code: string;
@@ -56,7 +58,9 @@ export const catchError = (error: Error, response: Response) => {
     error instanceof ProjectNotFoundError ||
     error instanceof InvalidProductDatesError ||
     error instanceof ProjectError ||
-    error instanceof InvalidStepError
+    error instanceof InvalidStepError ||
+    error instanceof InvalidPriorityError ||
+    error instanceof TestError
   ) {
     response.status(400).json(ErrorResponse.fromBaseError(error));
   }

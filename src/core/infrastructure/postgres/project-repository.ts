@@ -4,7 +4,7 @@ import { Repository, In } from 'typeorm';
 import { ProjectRepository } from '../../domain/project/project.repository';
 import { ProjectEntity } from '../../domain/project/project.entity';
 import { ProjectId } from '../../domain/project/id';
-import { Email } from 'src/core/domain/email';
+import { Email } from '../../domain/email';
 import { ProjectPersistenceEntity } from './entities/project.persistence.entity';
 import { TestTypePersistenceEntity } from './entities/testType.persistence.entity';
 

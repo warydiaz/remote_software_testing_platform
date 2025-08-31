@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
-import { ProfessionalProfileRepository } from 'src/core/domain/professional-profile/professional-profile.repository';
+import { ProfessionalProfileRepository } from '../../domain/professional-profile/professional-profile.repository';
 import { ExperiencePersistenceEntity } from './entities/experience.persistence.entity';
-import { ExperienceEntity } from 'src/core/domain/professional-profile/experience.entity';
+import { ExperienceEntity } from '../../domain/professional-profile/experience.entity';
 import { InterestPersistenceEntity } from './entities/interest.persistence.entity';
-import { InterestEntity } from 'src/core/domain/professional-profile/interest.entity';
+import { InterestEntity } from '../../domain/professional-profile/interest.entity';
 
 @Injectable()
 export class ProfessionalProfileTypeOrmRepository

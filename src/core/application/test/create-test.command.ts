@@ -1,4 +1,4 @@
-import { TestStep } from 'src/core/domain/test/testStep';
+import { TestStep } from '../../domain/test/testStep';
 interface CreateTestCommand {
   readonly id: string;
   readonly title: string;
