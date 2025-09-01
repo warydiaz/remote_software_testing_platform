@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 import {
   Entity,
   Column,
@@ -5,13 +6,23 @@ import {
   OneToMany,
   CreateDateColumn,
   UpdateDateColumn,
+  JoinColumn,
+  ManyToOne,
 } from 'typeorm';
 import { TestStepPersistenceEntity } from './test-step.persistence.entity';
+import { TesterPersistenceEntity } from './tester.persistence.entity';
 
 @Entity('test')
 export class TestPersistenceEntity {
   @PrimaryGeneratedColumn()
   id: string;
+
+  @ManyToOne(() => TesterPersistenceEntity, (tester) => tester.id, {
+    nullable: false,
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn({ name: 'testerId' })
+  tester: TesterPersistenceEntity;
 
   @Column({ length: 255 })
   title: string;

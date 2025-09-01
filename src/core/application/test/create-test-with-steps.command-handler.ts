@@ -20,6 +20,7 @@ export class CreateTestWithStepsHandler {
 
     const test = TestEntity.createWithSteps(
       command.id,
+      command.testerId,
       command.title,
       command.description,
       command.priority,

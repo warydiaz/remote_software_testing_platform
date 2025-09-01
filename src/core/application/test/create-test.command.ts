@@ -1,6 +1,7 @@
 import { TestStep } from '../../domain/test/testStep';
 interface CreateTestCommand {
   readonly id: string;
+  readonly testerId: string;
   readonly title: string;
   readonly description: string;
   readonly priority: 'high' | 'medium' | 'low';
@@ -12,6 +13,7 @@ interface CreateTestCommand {
 export class CreateTestWithStepsCommand implements CreateTestCommand {
   constructor(
     readonly id: string,
+    readonly testerId: string,
     readonly title: string,
     readonly description: string,
     readonly priority: 'high' | 'medium' | 'low',
@@ -26,6 +28,7 @@ export class CreateTestWithStepsCommand implements CreateTestCommand {
 export class CreateTestWithoutStepsCommand implements CreateTestCommand {
   constructor(
     readonly id: string,
+    readonly testerId: string,
     readonly title: string,
     readonly description: string,
     readonly priority: 'high' | 'medium' | 'low',
@@ -39,6 +42,7 @@ export class CreateTestWithoutStepsCommand implements CreateTestCommand {
 export class CreateExploratoryTestCommand implements CreateTestCommand {
   constructor(
     readonly id: string,
+    readonly testerId: string,
     readonly title: string,
     readonly description: string,
     readonly priority: 'high' | 'medium' | 'low',

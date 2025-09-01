@@ -1,6 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import { Controller, Post, Body, Res, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Res,
+  Request,
+  UseGuards,
+} from '@nestjs/common';
 import { Response } from 'express';
 import { v4 as uuidv4 } from 'uuid';
 import { catchError } from './error.handler';
@@ -33,9 +40,8 @@ export class CreateTestWithoutStepsDto extends BaseTestDto {
 }
 
 export class CreateExploratoryTestDTO extends BaseTestDto {}
-
 @Controller()
-export class CreateProjectController {
+export class CreateTestsController {
   constructor(
     private readonly commandHandlerTestWithSteps: CreateTestWithStepsHandler,
     private readonly commandHandlerTestWithoutSteps: CreateTestWithoutStepsHandler,
@@ -46,12 +52,14 @@ export class CreateProjectController {
   @Post('testWithSteps')
   async handleTestWithSteps(
     @Body() request: CreateTestWithStepsDto,
+    @Request() req,
     @Res() response: Response,
   ) {
     return this.executeCommand(
       this.commandHandlerTestWithSteps,
       new CreateTestWithStepsCommand(
         uuidv4(),
+        req.user.userId,
         request.title,
         request.description,
         request.priority,
@@ -70,12 +78,14 @@ export class CreateProjectController {
   @Post('testWithoutSteps')
   async handleTestWithoutSteps(
     @Body() request: CreateTestWithoutStepsDto,
+    @Request() req,
     @Res() response: Response,
   ) {
     return this.executeCommand(
       this.commandHandlerTestWithoutSteps,
       new CreateTestWithoutStepsCommand(
         uuidv4(),
+        req.user.userId,
         request.title,
         request.description,
         request.priority,
@@ -94,12 +104,14 @@ export class CreateProjectController {
   @Post('exploratoryTest')
   async handleExploratoryTest(
     @Body() request: CreateExploratoryTestDTO,
+    @Request() req,
     @Res() response: Response,
   ) {
     return this.executeCommand(
       this.commandHandlerTestExploratory,
       new CreateExploratoryTestCommand(
         uuidv4(),
+        req.user.userId,
         request.title,
         request.description,
         request.priority,

@@ -1,7 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -86,6 +82,7 @@ export class TestTypeOrmRepository implements TestRepository {
     if (db.testType === 'exploratory') {
       return TestEntity.createExploratory(
         db.id.toString(),
+        db.tester.id.toString(),
         db.title,
         db.description,
         db.priority,
@@ -104,6 +101,7 @@ export class TestTypeOrmRepository implements TestRepository {
 
       return TestEntity.createWithSteps(
         db.id.toString(),
+        db.tester.id.toString(),
         db.title,
         db.description,
         db.priority,
@@ -115,9 +113,9 @@ export class TestTypeOrmRepository implements TestRepository {
       );
     }
 
-    // default: without_steps
     return TestEntity.createWithoutSteps(
       db.id.toString(),
+      db.tester.id.toString(),
       db.title,
       db.description,
       db.priority,
@@ -128,10 +126,6 @@ export class TestTypeOrmRepository implements TestRepository {
       db.expectedResult!,
     );
   };
-
-  private isWithoutSteps(test: TestEntity): boolean {
-    return !test.steps || test.steps.length === 0;
-  }
 
   private isWithSteps(test: TestEntity): boolean {
     return !test.steps || test.steps.length > 0;

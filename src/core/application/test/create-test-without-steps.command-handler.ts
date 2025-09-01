@@ -15,6 +15,7 @@ export class CreateTestWithoutStepsHandler {
   async handle(command: CreateTestWithoutStepsCommand): Promise<void> {
     const test = TestEntity.createWithoutSteps(
       command.id,
+      command.testerId,
       command.title,
       command.description,
       command.priority,

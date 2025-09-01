@@ -1,3 +1,4 @@
+import { TesterId } from '../tester/id';
 import { TestId } from './id';
 import { TestDescription } from './testDescription';
 import { TestPriority } from './testPriority';
@@ -9,6 +10,7 @@ import { TestTitle } from './testTitle';
 export class TestEntity {
   private constructor(
     public readonly id: TestId,
+    public readonly testerId: TesterId,
     public readonly title: TestTitle,
     public readonly description: TestDescription,
     public readonly priority: TestPriority,
@@ -23,6 +25,7 @@ export class TestEntity {
 
   static createWithoutSteps(
     id: string,
+    testerId: string,
     title: string,
     description: string,
     priority: string,
@@ -34,6 +37,7 @@ export class TestEntity {
   ): TestEntity {
     return new TestEntity(
       TestId.create(id),
+      TesterId.create(testerId),
       TestTitle.create(title),
       TestDescription.create(description),
       TestPriority.create(priority),
@@ -49,6 +53,7 @@ export class TestEntity {
 
   static createWithSteps(
     id: string,
+    testerId: string,
     title: string,
     description: string,
     priority: string,
@@ -60,6 +65,7 @@ export class TestEntity {
   ): TestEntity {
     return new TestEntity(
       TestId.create(id),
+      TesterId.create(testerId),
       TestTitle.create(title),
       TestDescription.create(description),
       TestPriority.create(priority),
@@ -75,6 +81,7 @@ export class TestEntity {
 
   static createExploratory(
     id: string,
+    testerId: string,
     title: string,
     description: string,
     priority: string,
@@ -85,6 +92,7 @@ export class TestEntity {
   ): TestEntity {
     return new TestEntity(
       TestId.create(id),
+      TesterId.create(testerId),
       TestTitle.create(title),
       TestDescription.create(description),
       TestPriority.create(priority),

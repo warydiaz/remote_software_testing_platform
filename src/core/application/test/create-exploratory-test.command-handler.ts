@@ -15,6 +15,7 @@ export class CreateExploratoryTestHandler {
   async handle(command: CreateExploratoryTestCommand): Promise<void> {
     const test = TestEntity.createExploratory(
       command.id,
+      command.testerId,
       command.title,
       command.description,
       command.priority,
