@@ -8,6 +8,8 @@ import {
   TEST_REPOSITORY,
   TestRepository,
 } from '../../domain/test/test.repository';
+import { TestId } from '../../domain/test/id';
+import { v4 as uuidv4 } from 'uuid';
 
 export class CreateTestWithStepsHandler {
   constructor(
@@ -35,8 +37,14 @@ export class CreateTestWithStepsHandler {
   }
 
   private getSteps(steps: any[]): TestStep[] {
-    return steps.map(
-      (step) => new TestStep(step.order, step.description, step.expectedResult),
-    );
+    return steps.map((step) => {
+      const stepId = TestId.create(uuidv4().toString());
+      return new TestStep(
+        stepId,
+        step.order,
+        step.description,
+        step.expectedResult,
+      );
+    });
   }
 }

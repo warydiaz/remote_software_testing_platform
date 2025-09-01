@@ -10,7 +10,7 @@ import { TestPersistenceEntity } from './test.persistence.entity';
 @Entity('test_step')
 export class TestStepPersistenceEntity {
   @PrimaryGeneratedColumn()
-  id: number;
+  id: string;
 
   @Column({ type: 'text', name: 'step_description' })
   stepDescription: string;

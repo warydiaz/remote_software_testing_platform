@@ -20,6 +20,7 @@ export class TestTypeOrmRepository implements TestRepository {
   async save(test: TestEntity): Promise<void> {
     const dbTest = new TestPersistenceEntity();
     dbTest.id = test.id.value;
+    dbTest.tester = { id: test.testerId.value } as any; // Assuming tester is a relation
     dbTest.title = test.title.value;
     dbTest.description = test.description.value;
     dbTest.priority = test.priority.value;
@@ -96,7 +97,13 @@ export class TestTypeOrmRepository implements TestRepository {
     if (db.testType === 'with_steps') {
       const steps: TestStep[] =
         db.steps?.map(
-          (s) => new TestStep(s.stepOrder, s.stepDescription, s.expectedResult),
+          (s) =>
+            new TestStep(
+              TestId.create(s.id),
+              s.stepOrder,
+              s.stepDescription,
+              s.expectedResult,
+            ),
         ) ?? [];
 
       return TestEntity.createWithSteps(

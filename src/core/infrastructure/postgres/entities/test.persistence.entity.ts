@@ -21,7 +21,7 @@ export class TestPersistenceEntity {
     nullable: false,
     onDelete: 'CASCADE',
   })
-  @JoinColumn({ name: 'testerId' })
+  @JoinColumn({ name: 'tester_id' })
   tester: TesterPersistenceEntity;
 
   @Column({ length: 255 })
@@ -33,6 +33,7 @@ export class TestPersistenceEntity {
   @Column({
     type: 'varchar',
     length: 20,
+    name: 'test_type',
   })
   testType: 'with_steps' | 'without_steps' | 'exploratory';
 
@@ -42,16 +43,16 @@ export class TestPersistenceEntity {
   })
   priority: 'high' | 'medium' | 'low';
 
-  @Column({ type: 'boolean', default: false })
+  @Column({ type: 'boolean', default: false, name: 'is_automated' })
   isAutomated: boolean;
 
-  @Column({ type: 'boolean', default: false })
+  @Column({ type: 'boolean', default: false, name: 'is_regression' })
   isRegression: boolean;
 
-  @Column({ type: 'text' })
+  @Column({ type: 'text', name: 'requirement' })
   requirement: string;
 
-  @Column({ type: 'varchar', length: 50 })
+  @Column({ type: 'varchar', length: 50, name: 'sprint' })
   sprint: string;
 
   @Column({ type: 'text', name: 'expected_result', nullable: true })
