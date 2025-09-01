@@ -66,6 +66,7 @@ export class TestPersistenceEntity {
 
   @OneToMany(() => TestStepPersistenceEntity, (step) => step.test, {
     cascade: true,
+    eager: true,
   })
   steps: TestStepPersistenceEntity[];
 }

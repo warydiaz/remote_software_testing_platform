@@ -1,15 +1,9 @@
-import {
-  Entity,
-  Column,
-  PrimaryGeneratedColumn,
-  ManyToOne,
-  JoinColumn,
-} from 'typeorm';
+import { Entity, Column, ManyToOne, JoinColumn, PrimaryColumn } from 'typeorm';
 import { TestPersistenceEntity } from './test.persistence.entity';
 
 @Entity('test_step')
 export class TestStepPersistenceEntity {
-  @PrimaryGeneratedColumn()
+  @PrimaryColumn({ type: 'varchar', length: 100 })
   id: string;
 
   @Column({ type: 'text', name: 'step_description' })

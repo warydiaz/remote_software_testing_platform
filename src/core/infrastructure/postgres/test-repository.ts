@@ -37,9 +37,11 @@ export class TestTypeOrmRepository implements TestRepository {
       dbTest.testType = 'with_steps';
       dbTest.steps = test.steps.map((s) => {
         const step = new TestStepPersistenceEntity();
+        step.id = s.id.value;
         step.stepDescription = s.description;
         step.expectedResult = s.expectedResult;
         step.stepOrder = s.order;
+        step.test = dbTest;
         return step;
       });
     } else {
