@@ -16,6 +16,8 @@ import { ProjectError } from '../../domain/project/project.error';
 import { InvalidStepError } from '../../domain/test/invalid-test-step.error';
 import { InvalidPriorityError } from '../../domain/test/invalid-test-priority.error';
 import { TestError } from '../../domain/test/test.error';
+import { RepositoryAlreadyExistsError } from 'src/core/application/repository/customer-repository-exists.error';
+import { RepositoryError } from 'src/core/domain/repository/repository.error';
 
 export class ErrorResponse {
   code: string;
@@ -44,7 +46,8 @@ export const catchError = (error: Error, response: Response) => {
   if (
     error instanceof CustomerAlreadyExistsError ||
     error instanceof TesterAlreadyExistsError ||
-    error instanceof ProductAlreadyExistsError
+    error instanceof ProductAlreadyExistsError ||
+    error instanceof RepositoryAlreadyExistsError
   ) {
     response.status(409).json(ErrorResponse.fromBaseError(error));
   }
@@ -60,7 +63,8 @@ export const catchError = (error: Error, response: Response) => {
     error instanceof ProjectError ||
     error instanceof InvalidStepError ||
     error instanceof InvalidPriorityError ||
-    error instanceof TestError
+    error instanceof TestError ||
+    error instanceof RepositoryError
   ) {
     response.status(400).json(ErrorResponse.fromBaseError(error));
   }
