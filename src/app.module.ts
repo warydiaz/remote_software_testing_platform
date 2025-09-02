@@ -65,6 +65,11 @@ import { TestStepPersistenceEntity } from './core/infrastructure/postgres/entiti
 // Auth
 import { JwtStrategy } from './core/infrastructure/auth/jwt.strategy';
 import { TestTypePersistenceEntity } from './core/infrastructure/postgres/entities/testType.persistence.entity';
+import { CreateRepositoryHandler } from './core/application/repository/create-repository.command-handler';
+import { REPOSITORY_REPOSITORY } from './core/domain/repository/repository.repository';
+import { RepositoryTypeOrmRepository } from './core/infrastructure/postgres/repository-repository';
+import { RepositoryPersistenceEntity } from './core/infrastructure/postgres/entities/repository.persistence.entity';
+import { CreateRepositoryController } from './core/ui/api/add-repository.controller';
 
 @Module({
   imports: [
@@ -83,6 +88,7 @@ import { TestTypePersistenceEntity } from './core/infrastructure/postgres/entiti
       TestPersistenceEntity,
       TestTypePersistenceEntity,
       TestStepPersistenceEntity,
+      RepositoryPersistenceEntity,
     ]),
     JwtModule.register({
       secret: process.env.JWT_SECRET,
@@ -106,6 +112,7 @@ import { TestTypePersistenceEntity } from './core/infrastructure/postgres/entiti
     CreateProjectController,
     HealthCheckController,
     CreateTestsController,
+    CreateRepositoryController,
   ],
   providers: [
     // Command Handlers
@@ -120,6 +127,7 @@ import { TestTypePersistenceEntity } from './core/infrastructure/postgres/entiti
     CreateTestWithStepsHandler,
     CreateTestWithoutStepsHandler,
     CreateExploratoryTestHandler,
+    CreateRepositoryHandler,
 
     // Repositories
     { provide: CUSTOMER_REPOSITORY, useClass: CustomerTypeOrmRepository },
@@ -133,7 +141,7 @@ import { TestTypePersistenceEntity } from './core/infrastructure/postgres/entiti
     { provide: PRODUCT_REPOSITORY, useClass: ProductTypeOrmRepository },
     { provide: TEST_REPOSITORY, useClass: TestTypeOrmRepository },
     { provide: USER_REPOSITORY, useClass: UserTypeOrmRepository },
-
+    { provide: REPOSITORY_REPOSITORY, useClass: RepositoryTypeOrmRepository },
     // Auth & Guards
     JwtStrategy,
     { provide: APP_GUARD, useClass: ThrottlerGuard },
