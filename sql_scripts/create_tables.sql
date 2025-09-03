@@ -471,7 +471,7 @@ CREATE TABLE IF NOT EXISTS customers (
   id VARCHAR(100) PRIMARY KEY REFERENCES "user"(id)
 );
 
-CREATE TABLE project (
+CREATE TABLE IF NOT EXISTS project(
   id VARCHAR(100) PRIMARY KEY,
   name VARCHAR(255) NOT NULL,
   description TEXT,
@@ -481,7 +481,7 @@ CREATE TABLE project (
   end_date DATE NOT NULL
 );
 
-CREATE TABLE project_test_type (
+CREATE TABLE IF NOT EXISTS project_test_type (
   id VARCHAR(100) PRIMARY KEY,
   name VARCHAR(255) NOT NULL
 );
@@ -496,13 +496,13 @@ INSERT INTO project_test_type (id, name) VALUES
   ('7', 'Regression Test'),
   ('8', 'Smoke Test');
 
-CREATE TABLE project_test_type_mapping (
+CREATE TABLE IF NOT EXISTS project_test_type_mapping (
   project_id VARCHAR(100) REFERENCES project(id) ON DELETE CASCADE,
   test_type_id VARCHAR(100) REFERENCES project_test_type(id) ON DELETE CASCADE,
   PRIMARY KEY (project_id, test_type_id)
 );
 
-CREATE TABLE product (
+CREATE TABLE IF NOT EXISTS product(
     id VARCHAR(100) NOT NULL,
     project_id VARCHAR(100) NOT NULL,
     name VARCHAR(255) NOT NULL,
@@ -514,8 +514,9 @@ CREATE TABLE product (
     FOREIGN KEY (project_id) REFERENCES project(id)
 );
 -- Main Test table
-CREATE TABLE test (
-    id SERIAL PRIMARY KEY,
+CREATE TABLE IF NOT EXISTS test (
+    id VARCHAR(100) PRIMARY KEY,
+    tester_id VARCHAR(100) NOT NULL REFERENCES "user"(id),
     title VARCHAR(255) NOT NULL,
     description TEXT,
     test_type VARCHAR(20) NOT NULL CHECK (test_type IN ('with_steps', 'without_steps', 'exploratory')),
@@ -531,9 +532,9 @@ CREATE TABLE test (
 );
 
 -- Steps table for tests that have steps
-CREATE TABLE test_step (
-    id SERIAL PRIMARY KEY,
-    test_id INT NOT NULL REFERENCES test(id) ON DELETE CASCADE,
+CREATE TABLE IF NOT EXISTS test_step (
+    id VARCHAR(100) PRIMARY KEY,
+    test_id VARCHAR(100) NOT NULL REFERENCES test(id) ON DELETE CASCADE,
     step_description TEXT NOT NULL,
     expected_result TEXT,
     step_order INT NOT NULL DEFAULT 1 -- Keeps the execution order
@@ -552,3 +553,48 @@ CREATE TRIGGER trg_update_timestamp
 BEFORE UPDATE ON test
 FOR EACH ROW
 EXECUTE FUNCTION update_timestamp();
+
+CREATE TABLE IF NOT EXISTS repository (
+    id VARCHAR(100) PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    tester_id VARCHAR(100) NOT NULL REFERENCES "user"(id),
+    description TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT NOW(),
+    updated_at TIMESTAMP DEFAULT NOW()
+);
+
+
+SELECT * from repository;
+
+CREATE TABLE IF NOT EXISTS folder (
+    id VARCHAR(100) PRIMARY KEY,
+    repository_id VARCHAR(100) NOT NULL REFERENCES repository(id),
+    name VARCHAR(255) NOT NULL,
+    path TEXT NOT NULL,
+    tester_id VARCHAR(100) NOT NULL REFERENCES "user"(id),
+    description TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT NOW(),
+    updated_at TIMESTAMP DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS file (
+    id VARCHAR(100) PRIMARY KEY,
+    folder_id VARCHAR(100) NOT NULL REFERENCES folder(id),
+    test_id VARCHAR(255) NOT NULL REFERENCES test(id),
+    tester_id VARCHAR(100) NOT NULL REFERENCES "user"(id),
+    created_at TIMESTAMP DEFAULT NOW(),
+    updated_at TIMESTAMP DEFAULT NOW()
+);
+
+CREATE OR REPLACE FUNCTION update_timestamp_repository()
+RETURNS TRIGGER AS $$
+BEGIN
+   NEW.updated_at = NOW();
+   RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trg_update_timestamp_repository
+BEFORE UPDATE ON repository
+FOR EACH ROW
+EXECUTE FUNCTION update_timestamp_repository();
