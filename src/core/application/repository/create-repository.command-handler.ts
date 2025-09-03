@@ -28,8 +28,8 @@ export class CreateRepositoryHandler {
 
     const repository = RepositoryEntity.create(
       command.id,
-      command.title,
       command.tester_id,
+      command.title,
       command.description,
     );
 

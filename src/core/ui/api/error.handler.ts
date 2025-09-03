@@ -19,6 +19,7 @@ import { TestError } from '../../domain/test/test.error';
 import { RepositoryAlreadyExistsError } from 'src/core/application/repository/customer-repository-exists.error';
 import { RepositoryError } from 'src/core/domain/repository/repository.error';
 import { FolderAlreadyExistsError } from 'src/core/application/folder/folder-exists.error';
+import { FolderError } from 'src/core/domain/folder/folder.error';
 
 export class ErrorResponse {
   code: string;
@@ -66,7 +67,8 @@ export const catchError = (error: Error, response: Response) => {
     error instanceof InvalidStepError ||
     error instanceof InvalidPriorityError ||
     error instanceof TestError ||
-    error instanceof RepositoryError
+    error instanceof RepositoryError ||
+    error instanceof FolderError
   ) {
     response.status(400).json(ErrorResponse.fromBaseError(error));
   }
