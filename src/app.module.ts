@@ -13,7 +13,7 @@ import { GetLocationController } from './core/ui/api/get-location.controller';
 import { GetProfessionalProfileController } from './core/ui/api/get-professional-profile.controller';
 import { CreateTesterController } from './core/ui/api/create-tester.controller';
 import { CreateProjectController } from './core/ui/api/add-project.controller';
-import { HealthCheckController } from './core/ui/api/health-check.controler';
+import { HealthCheckController } from './core/ui/api/health-check.controller';
 import { CreateTestsController } from './core/ui/api/add-test.controller';
 
 // Command Handlers
@@ -70,6 +70,11 @@ import { REPOSITORY_REPOSITORY } from './core/domain/repository/repository.repos
 import { RepositoryTypeOrmRepository } from './core/infrastructure/postgres/repository-repository';
 import { RepositoryPersistenceEntity } from './core/infrastructure/postgres/entities/repository.persistence.entity';
 import { CreateRepositoryController } from './core/ui/api/add-repository.controller';
+import { CreateFolderHandler } from './core/application/folder/create-folder.command-handler';
+import { FolderPersistenceEntity } from './core/infrastructure/postgres/entities/folder.persistence.entity';
+import { FOLDER_REPOSITORY } from './core/domain/folder/folder.repository';
+import { FolderTypeOrmRepository } from './core/infrastructure/postgres/folder-repository';
+import { CreateFolderController } from './core/ui/api/add-folder.controller';
 
 @Module({
   imports: [
@@ -89,6 +94,7 @@ import { CreateRepositoryController } from './core/ui/api/add-repository.control
       TestTypePersistenceEntity,
       TestStepPersistenceEntity,
       RepositoryPersistenceEntity,
+      FolderPersistenceEntity,
     ]),
     JwtModule.register({
       secret: process.env.JWT_SECRET,
@@ -113,6 +119,7 @@ import { CreateRepositoryController } from './core/ui/api/add-repository.control
     HealthCheckController,
     CreateTestsController,
     CreateRepositoryController,
+    CreateFolderController,
   ],
   providers: [
     // Command Handlers
@@ -128,6 +135,7 @@ import { CreateRepositoryController } from './core/ui/api/add-repository.control
     CreateTestWithoutStepsHandler,
     CreateExploratoryTestHandler,
     CreateRepositoryHandler,
+    CreateFolderHandler,
 
     // Repositories
     { provide: CUSTOMER_REPOSITORY, useClass: CustomerTypeOrmRepository },
@@ -142,6 +150,7 @@ import { CreateRepositoryController } from './core/ui/api/add-repository.control
     { provide: TEST_REPOSITORY, useClass: TestTypeOrmRepository },
     { provide: USER_REPOSITORY, useClass: UserTypeOrmRepository },
     { provide: REPOSITORY_REPOSITORY, useClass: RepositoryTypeOrmRepository },
+    { provide: FOLDER_REPOSITORY, useClass: FolderTypeOrmRepository },
     // Auth & Guards
     JwtStrategy,
     { provide: APP_GUARD, useClass: ThrottlerGuard },

@@ -18,6 +18,7 @@ import { InvalidPriorityError } from '../../domain/test/invalid-test-priority.er
 import { TestError } from '../../domain/test/test.error';
 import { RepositoryAlreadyExistsError } from 'src/core/application/repository/customer-repository-exists.error';
 import { RepositoryError } from 'src/core/domain/repository/repository.error';
+import { FolderAlreadyExistsError } from 'src/core/application/folder/folder-exists.error';
 
 export class ErrorResponse {
   code: string;
@@ -47,7 +48,8 @@ export const catchError = (error: Error, response: Response) => {
     error instanceof CustomerAlreadyExistsError ||
     error instanceof TesterAlreadyExistsError ||
     error instanceof ProductAlreadyExistsError ||
-    error instanceof RepositoryAlreadyExistsError
+    error instanceof RepositoryAlreadyExistsError ||
+    error instanceof FolderAlreadyExistsError
   ) {
     response.status(409).json(ErrorResponse.fromBaseError(error));
   }
