@@ -1,4 +1,5 @@
-import { Entity, PrimaryColumn, Column } from 'typeorm';
+import { Entity, PrimaryColumn, Column, OneToMany } from 'typeorm';
+import { RepositoryPersistenceEntity } from './repository.persistence.entity';
 
 @Entity('tester')
 export class TesterPersistenceEntity {
@@ -25,4 +26,11 @@ export class TesterPersistenceEntity {
 
   @Column({ type: 'int', array: true, nullable: true })
   interests: number[];
+
+  // 🔹 Relación con RepositoryPersistenceEntity
+  @OneToMany(
+    () => RepositoryPersistenceEntity,
+    (repository) => repository.tester,
+  )
+  repositories: RepositoryPersistenceEntity[];
 }

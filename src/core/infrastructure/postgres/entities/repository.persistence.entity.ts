@@ -18,7 +18,11 @@ export class RepositoryPersistenceEntity {
   @Column({ length: 255 })
   title: string;
 
-  @ManyToOne(() => TesterPersistenceEntity, (tester) => tester.id, {
+  // Columna explícita para la FK
+  @Column({ name: 'tester_id', type: 'varchar', length: 100 })
+  testerId: string;
+
+  @ManyToOne(() => TesterPersistenceEntity, (tester) => tester.repositories, {
     nullable: false,
     onDelete: 'CASCADE',
   })

@@ -8,6 +8,7 @@ import { FolderId } from '../../domain/folder/id';
 import { FolderTitle } from '../../domain/folder/folderTitle';
 import { RepositoryId } from '../../domain/repository/id';
 import { FolderPersistenceEntity } from './entities/folder.persistence.entity';
+import { FolderPath } from 'src/core/domain/folder/folderPath';
 
 @Injectable()
 export class FolderTypeOrmRepository implements FolderRepository {
@@ -48,14 +49,16 @@ export class FolderTypeOrmRepository implements FolderRepository {
     return dbFolders.map(this.toDomain);
   }
 
-  async findByTitleAndRepositoryId(
+  async findByTitleAndRepositoryIdAndPath(
     title: FolderTitle,
     repositoryId: RepositoryId,
+    path: FolderPath,
   ): Promise<FolderEntity | undefined> {
     const dbFolder = await this.folderRepo.findOne({
       where: {
         name: title.value,
         repository: { id: repositoryId.value },
+        path: path.value,
       },
       relations: ['repository', 'tester'],
     });
