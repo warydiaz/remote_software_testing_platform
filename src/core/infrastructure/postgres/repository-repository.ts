@@ -38,6 +38,8 @@ export class RepositoryTypeOrmRepository implements RepositoryRepository {
       where: { id: id.value },
       relations: ['tester'],
     });
+
+    console.log('dbRepository: ', dbRepository);
     return dbRepository ? this.toDomain(dbRepository) : undefined;
   }
 
