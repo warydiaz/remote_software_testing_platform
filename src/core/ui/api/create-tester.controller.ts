@@ -5,11 +5,11 @@ import { Body, Controller, Post, Res } from '@nestjs/common';
 import { v4 as uuidv4 } from 'uuid';
 import { Response } from 'express';
 import { catchError } from './error.handler';
-import { RegisterTesterCommandHandler } from 'src/core/application/tester/register-tester.command-handler';
-import { RegisterTesterCommand } from 'src/core/application/tester/register-tester.command';
+import { RegisterTesterCommandHandler } from '../../application/tester/register-tester.command-handler';
+import { RegisterTesterCommand } from '../../application/tester/register-tester.command';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigModule } from '@nestjs/config';
-import { RedisService } from 'src/core/infrastructure/redis/redis.service';
+import { RedisService } from '../../infrastructure/redis/redis.service';
 void ConfigModule.forRoot();
 
 export class CreateTesterDto {

@@ -10,6 +10,7 @@ export interface ProjectRepository {
   deleteById(id: ProjectId): Promise<void>;
   update(project: ProjectEntity): Promise<void>;
   findByName(name: string): Promise<ProjectEntity | undefined>;
+  findByUserId(userId: string): Promise<ProjectEntity | undefined>;
 }
 
 export const PROJECT_REPOSITORY = Symbol('ProjectRepository');

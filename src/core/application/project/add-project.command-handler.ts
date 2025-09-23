@@ -41,6 +41,7 @@ export class AddProjectCommandHandler {
 
     const project = ProjectEntity.create(
       command.id,
+      command.userId,
       command.name,
       command.description,
       command.email,

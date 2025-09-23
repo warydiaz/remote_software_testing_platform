@@ -1,6 +1,7 @@
 export class AddProjectCommand {
   constructor(
     readonly id: string,
+    readonly userId: string,
     readonly name: string,
     readonly description: string,
     readonly email: string,

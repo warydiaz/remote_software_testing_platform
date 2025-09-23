@@ -5,10 +5,12 @@ import { Email } from '../email';
 import { ProductProject } from './productProject';
 import { ProjectDate } from './projectDate';
 import { TestType } from './testType';
+import { CustomerId } from '../customer/id';
 
 export class ProjectEntity {
   constructor(
     public readonly id: ProjectId,
+    public readonly userId: CustomerId,
     public readonly name: ProjectName,
     public readonly description: ProjectDescription,
     public readonly email: Email,
@@ -20,6 +22,7 @@ export class ProjectEntity {
 
   static create(
     anId: string,
+    aUserId: string,
     aName: string,
     aDescription: string,
     anEmail: string,
@@ -29,6 +32,7 @@ export class ProjectEntity {
     testTypeNumbers: number[],
   ): ProjectEntity {
     const id = ProjectId.create(anId);
+    const userId = CustomerId.create(aUserId);
     const name = ProjectName.create(aName);
     const description = ProjectDescription.create(aDescription);
     const email = Email.create(anEmail);
@@ -39,6 +43,7 @@ export class ProjectEntity {
 
     return new ProjectEntity(
       id,
+      userId,
       name,
       description,
       email,

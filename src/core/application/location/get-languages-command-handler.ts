@@ -3,7 +3,7 @@ import {
   LOCATION_REPOSITORY,
   LocationRepository,
 } from '../../domain/location/location.repository';
-import { LanguageEntity } from 'src/core/domain/location/language.entity';
+import { LanguageEntity } from '../../domain/location/language.entity';
 
 @Injectable()
 export class GetLanguagesHandler {

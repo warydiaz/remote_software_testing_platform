@@ -4,7 +4,7 @@ import { Repository, In } from 'typeorm';
 import { ProjectRepository } from '../../domain/project/project.repository';
 import { ProjectEntity } from '../../domain/project/project.entity';
 import { ProjectId } from '../../domain/project/id';
-import { Email } from 'src/core/domain/email';
+import { Email } from '../../domain/email';
 import { ProjectPersistenceEntity } from './entities/project.persistence.entity';
 import { TestTypePersistenceEntity } from './entities/testType.persistence.entity';
 
@@ -20,6 +20,7 @@ export class ProjectTypeOrmRepository implements ProjectRepository {
   async save(project: ProjectEntity): Promise<void> {
     const dbProject = new ProjectPersistenceEntity();
     dbProject.id = project.id.value;
+    dbProject.userId = project.userId.value;
     dbProject.name = project.name.value;
     dbProject.description = project.description.value;
     dbProject.email = project.email.value;
@@ -54,6 +55,15 @@ export class ProjectTypeOrmRepository implements ProjectRepository {
     return dbProject ? this.toDomain(dbProject) : undefined;
   }
 
+  async findByUserId(userId: string): Promise<ProjectEntity | undefined> {
+    const dbProject = await this.projectRepo.findOne({
+      where: { userId },
+      relations: ['testTypes'],
+    });
+
+    return dbProject ? this.toDomain(dbProject) : undefined;
+  }
+
   async findByEmail(email: Email): Promise<ProjectEntity | undefined> {
     const dbProject = await this.projectRepo.findOne({
       where: { email: email.value },
@@ -78,14 +88,18 @@ export class ProjectTypeOrmRepository implements ProjectRepository {
   }
 
   private toDomain = (db: ProjectPersistenceEntity): ProjectEntity => {
+    const startDate = new Date(db.startDate);
+    const endDate = new Date(db.endDate);
+
     return ProjectEntity.create(
       db.id,
+      db.userId,
       db.name,
       db.description,
       db.email,
       db.product,
-      db.startDate,
-      db.endDate,
+      startDate,
+      endDate,
       db.testTypes?.map((tt) => parseInt(tt.id)) ?? [],
     );
   };

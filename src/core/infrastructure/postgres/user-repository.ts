@@ -2,10 +2,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Email } from 'src/core/domain/email';
+import { Email } from '../../domain/email';
 import { UserPersistenceEntity } from './entities/user.persistence.entity';
-import { UserRepository } from 'src/core/domain/user/user.repository';
-import { UserEntity } from 'src/core/domain/user/user.entity';
+import { UserRepository } from '../../domain/user/user.repository';
+import { UserEntity } from '../../domain/user/user.entity';
 
 @Injectable()
 export class UserTypeOrmRepository implements UserRepository {

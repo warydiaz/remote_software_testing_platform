@@ -1,10 +1,19 @@
-import { Controller, Post, Body, Res, UseGuards } from '@nestjs/common';
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+import {
+  Controller,
+  Post,
+  Body,
+  Res,
+  Request,
+  UseGuards,
+} from '@nestjs/common';
 import { Response } from 'express';
 import { AddProjectCommandHandler } from '../../application/project/add-project.command-handler';
 import { AddProjectCommand } from '../../application/project/add-project.command';
 import { v4 as uuidv4 } from 'uuid';
 import { catchError } from './error.handler';
-import { JwtAuthGuard } from 'src/core/infrastructure/auth/jwt-auth.guard';
+import { JwtAuthGuard } from '../../infrastructure/auth/jwt-auth.guard';
 
 export class CreateProjectDto {
   name: string;
@@ -22,7 +31,11 @@ export class CreateProjectController {
 
   @UseGuards(JwtAuthGuard)
   @Post('projects')
-  async handle(@Body() request: CreateProjectDto, @Res() response: Response) {
+  async handle(
+    @Body() request: CreateProjectDto,
+    @Request() req,
+    @Res() response: Response,
+  ) {
     const id = uuidv4();
 
     try {
@@ -31,6 +44,7 @@ export class CreateProjectController {
 
       const command = new AddProjectCommand(
         id,
+        req.user.userId,
         request.name,
         request.description,
         request.email,

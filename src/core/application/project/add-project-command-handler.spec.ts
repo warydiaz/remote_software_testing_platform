@@ -18,6 +18,7 @@ describe('AddProjectCommandHandler', () => {
 
   const baseCommand: AddProjectCommand = {
     id: uuid(),
+    userId: uuid(),
     name: 'Project Name',
     description: 'Description',
     email: 'test@example.com',

@@ -1,5 +1,3 @@
-// src/core/infrastructure/filters/throttler-exception.filter.ts
-
 import {
   ExceptionFilter,
   Catch,
