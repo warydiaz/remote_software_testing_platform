@@ -564,8 +564,6 @@ CREATE TABLE IF NOT EXISTS repository (
 );
 
 
-SELECT * from repository;
-
 CREATE TABLE IF NOT EXISTS folder (
     id VARCHAR(100) PRIMARY KEY,
     repository_id VARCHAR(100) NOT NULL REFERENCES repository(id),
