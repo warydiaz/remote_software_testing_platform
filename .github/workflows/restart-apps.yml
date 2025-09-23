@@ -61,4 +61,4 @@ jobs:
               -e PORT=8080 \
               -e PRE_FIX=api8080 \
               -p 8080:8080 \
-              europe-southwest1-docker.pkg.dev/unified-booster-465912-f9/services-docker/features-docker:latest
+              europe-southwest1-docker.pkg.dev/ringed-system-473012-n2/services-docker/features-docker:latest
